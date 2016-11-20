@@ -22,7 +22,7 @@ export function login(email, password) {
             token: json.token,
             user: json.user
           });
-					localStorage.setItem('user', JSON.stringify(json.user));
+          localStorage.setItem('user', JSON.stringify(json.user));
           cookie.save('token', json.token, { expires: moment().add(1, 'hour').toDate() });
           browserHistory.push('/account');
         });
@@ -70,6 +70,7 @@ export function signup(name, email, password) {
 
 export function logout() {
   cookie.remove('token');
+  localStorage.removeItem('user');
   browserHistory.push('/');
   return {
     type: 'LOGOUT_SUCCESS'

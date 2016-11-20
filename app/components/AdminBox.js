@@ -7,6 +7,9 @@ class AdminBox extends RoleAwareComponent {
 
     // component will be visible for the roles below:
     this.authorize = ['admin'];
+    this.state = {
+      window: false
+    };
   }
 
   render() {
@@ -17,8 +20,8 @@ class AdminBox extends RoleAwareComponent {
         </div>
       </div>
     );
-
-    return this.shouldBeVisible() ? jsx : null;
+    
+    return jsx;
   }
 }
 

@@ -132,6 +132,7 @@ function signup(name, email, password) {
 
 function logout() {
   _get__('cookie').remove('token');
+  localStorage.removeItem('user');
   _get__('browserHistory').push('/');
   return {
     type: 'LOGOUT_SUCCESS'
@@ -897,18 +898,18 @@ var AuthorizedComponent = function (_get__$Component) {
   }
 
   _createClass(AuthorizedComponent, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
       var routes = this.props.routes; // array of routes
 
       var router = this.context.router;
 
-      // check if user data available
+      var role = null;
 
-      debugger;
-      console.log(localStorage);
+      // check if user data available
       var user = JSON.parse(localStorage.getItem('user'));
-      if (!user) {
+
+      if (!user || user.role == undefined) {
         // redirect to login if not
         router.push('/login');
       }
@@ -3037,7 +3038,7 @@ exports.__RewireAPI__ = _RewireAPI__;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
 
@@ -3054,6 +3055,10 @@ var _reactRedux = require('react-redux');
 var _Messages = require('./Messages');
 
 var _Messages2 = _interopRequireDefault(_Messages);
+
+var _reactCookie = require('react-cookie');
+
+var _reactCookie2 = _interopRequireDefault(_reactCookie);
 
 var _reactVirtualized = require('react-virtualized');
 
@@ -3075,79 +3080,35 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var list = ['Brian Vaughn', 'Baughn', 'Vaughn'];
-
 var Admin = function (_get__2) {
-	_inherits(Admin, _get__2);
+  _inherits(Admin, _get__2);
 
-	function Admin() {
-		_classCallCheck(this, Admin);
+  function Admin() {
+    _classCallCheck(this, Admin);
 
-		return _possibleConstructorReturn(this, (Admin.__proto__ || Object.getPrototypeOf(Admin)).apply(this, arguments));
-	}
+    return _possibleConstructorReturn(this, (Admin.__proto__ || Object.getPrototypeOf(Admin)).apply(this, arguments));
+  }
 
-	_createClass(Admin, [{
-		key: 'render',
-		value: function render() {
-			var _RouteHandler_Component = _get__('RouteHandler');
+  _createClass(Admin, [{
+    key: 'render',
+    value: function render() {
+      var _RouteHandler_Component = _get__('RouteHandler');
 
-			return _react2.default.createElement(
-				'div',
-				{ className: 'pure-g profile-container' },
-				_react2.default.createElement(_RouteHandler_Component, this.props)
-			);
-		}
-		/*	constructor(props) {
-  		super(props);
-  	}
-  
-  	handleGetUsers(event) {
-  		event.preventDefault();
-  		this.bla = this.props.dispatch(getAllUsers());
-  	}
-  
-  	render() {
-  		debugger;
-  		return(
-  			<div>
-  		<List
-  		className="List"
-  		width={300}
-      height={300}
-      rowCount={list.length}
-      rowHeight={20}
-      rowRenderer={this.rowRenderer}
-     />
-   </div>
-  );
-  	}
-  
-  	rowRenderer ({
-  		key,         // Unique key within array of rows
-  		index,       // Index of row within collection
-  		isScrolling, // The List is currently being scrolled
-  		isVisible,   // This row is visible within the List (eg it is not an overscanned row)
-  		style        // Style object to be applied to row (to position it)
-  	}) {
-  		debugger;
-  	//	const datum =;
-  		debugger;
-  		return (
-  			<div key={key} style={style}>
-  				{list[this.bla]}
-  			</div>
-  		)
-  	}*/
+      return _react2.default.createElement(
+        'div',
+        { className: 'pure-g profile-container' },
+        _react2.default.createElement(_RouteHandler_Component, this.props)
+      );
+    }
+  }]);
 
-	}]);
-
-	return Admin;
+  return Admin;
 }(_get__('AuthorizedComponent'));
 
 var mapStateToProps = function mapStateToProps(state) {
-	return {
-		messages: state.messages
-	};
+  return {
+    messages: state.messages
+  };
 };
 
 var _DefaultExportValue = _get__('connect')(_get__('mapStateToProps'))(_get__('Admin'));
@@ -3157,132 +3118,132 @@ var _RewiredData__ = {};
 var _RewireAPI__ = {};
 
 (function () {
-	function addPropertyToAPIObject(name, value) {
-		Object.defineProperty(_RewireAPI__, name, {
-			value: value,
-			enumerable: false,
-			configurable: true
-		});
-	}
+  function addPropertyToAPIObject(name, value) {
+    Object.defineProperty(_RewireAPI__, name, {
+      value: value,
+      enumerable: false,
+      configurable: true
+    });
+  }
 
-	addPropertyToAPIObject('__get__', _get__);
-	addPropertyToAPIObject('__GetDependency__', _get__);
-	addPropertyToAPIObject('__Rewire__', _set__);
-	addPropertyToAPIObject('__set__', _set__);
-	addPropertyToAPIObject('__reset__', _reset__);
-	addPropertyToAPIObject('__ResetDependency__', _reset__);
-	addPropertyToAPIObject('__with__', _with__);
+  addPropertyToAPIObject('__get__', _get__);
+  addPropertyToAPIObject('__GetDependency__', _get__);
+  addPropertyToAPIObject('__Rewire__', _set__);
+  addPropertyToAPIObject('__set__', _set__);
+  addPropertyToAPIObject('__reset__', _reset__);
+  addPropertyToAPIObject('__ResetDependency__', _reset__);
+  addPropertyToAPIObject('__with__', _with__);
 })();
 
 function _get__(variableName) {
-	return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+  return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
 }
 
 function _get_original__(variableName) {
-	switch (variableName) {
-		case 'RouteHandler':
-			return _RouteHandler2.default;
+  switch (variableName) {
+    case 'RouteHandler':
+      return _RouteHandler2.default;
 
-		case 'AuthorizedComponent':
-			return _AuthorizedComponent2.default;
+    case 'AuthorizedComponent':
+      return _AuthorizedComponent2.default;
 
-		case 'connect':
-			return _reactRedux.connect;
+    case 'connect':
+      return _reactRedux.connect;
 
-		case 'mapStateToProps':
-			return mapStateToProps;
+    case 'mapStateToProps':
+      return mapStateToProps;
 
-		case 'Admin':
-			return Admin;
-	}
+    case 'Admin':
+      return Admin;
+  }
 
-	return undefined;
+  return undefined;
 }
 
 function _assign__(variableName, value) {
-	if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
-		return _set_original__(variableName, value);
-	} else {
-		return _RewiredData__[variableName] = value;
-	}
+  if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+    return _set_original__(variableName, value);
+  } else {
+    return _RewiredData__[variableName] = value;
+  }
 }
 
 function _set_original__(variableName, _value) {
-	switch (variableName) {}
+  switch (variableName) {}
 
-	return undefined;
+  return undefined;
 }
 
 function _update_operation__(operation, variableName, prefix) {
-	var oldValue = _get__(variableName);
+  var oldValue = _get__(variableName);
 
-	var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+  var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
 
-	_assign__(variableName, newValue);
+  _assign__(variableName, newValue);
 
-	return prefix ? newValue : oldValue;
+  return prefix ? newValue : oldValue;
 }
 
 function _set__(variableName, value) {
-	if ((typeof variableName === 'undefined' ? 'undefined' : _typeof(variableName)) === 'object') {
-		Object.keys(variableName).forEach(function (name) {
-			_RewiredData__[name] = variableName[name];
-		});
-	} else {
-		return _RewiredData__[variableName] = value;
-	}
+  if ((typeof variableName === 'undefined' ? 'undefined' : _typeof(variableName)) === 'object') {
+    Object.keys(variableName).forEach(function (name) {
+      _RewiredData__[name] = variableName[name];
+    });
+  } else {
+    return _RewiredData__[variableName] = value;
+  }
 }
 
 function _reset__(variableName) {
-	delete _RewiredData__[variableName];
+  delete _RewiredData__[variableName];
 }
 
 function _with__(object) {
-	var rewiredVariableNames = Object.keys(object);
-	var previousValues = {};
+  var rewiredVariableNames = Object.keys(object);
+  var previousValues = {};
 
-	function reset() {
-		rewiredVariableNames.forEach(function (variableName) {
-			_RewiredData__[variableName] = previousValues[variableName];
-		});
-	}
+  function reset() {
+    rewiredVariableNames.forEach(function (variableName) {
+      _RewiredData__[variableName] = previousValues[variableName];
+    });
+  }
 
-	return function (callback) {
-		rewiredVariableNames.forEach(function (variableName) {
-			previousValues[variableName] = _RewiredData__[variableName];
-			_RewiredData__[variableName] = object[variableName];
-		});
-		var result = callback();
+  return function (callback) {
+    rewiredVariableNames.forEach(function (variableName) {
+      previousValues[variableName] = _RewiredData__[variableName];
+      _RewiredData__[variableName] = object[variableName];
+    });
+    var result = callback();
 
-		if (!!result && typeof result.then == 'function') {
-			result.then(reset).catch(reset);
-		} else {
-			reset();
-		}
+    if (!!result && typeof result.then == 'function') {
+      result.then(reset).catch(reset);
+    } else {
+      reset();
+    }
 
-		return result;
-	};
+    return result;
+  };
 }
 
 var _typeOfOriginalExport = typeof _DefaultExportValue === 'undefined' ? 'undefined' : _typeof(_DefaultExportValue);
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(_DefaultExportValue, name, {
-		value: value,
-		enumerable: false,
-		configurable: true
-	});
+  Object.defineProperty(_DefaultExportValue, name, {
+    value: value,
+    enumerable: false,
+    configurable: true
+  });
 }
 
 if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
-	addNonEnumerableProperty('__get__', _get__);
-	addNonEnumerableProperty('__GetDependency__', _get__);
-	addNonEnumerableProperty('__Rewire__', _set__);
-	addNonEnumerableProperty('__set__', _set__);
-	addNonEnumerableProperty('__reset__', _reset__);
-	addNonEnumerableProperty('__ResetDependency__', _reset__);
-	addNonEnumerableProperty('__with__', _with__);
-	addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+  addNonEnumerableProperty('__get__', _get__);
+  addNonEnumerableProperty('__GetDependency__', _get__);
+  addNonEnumerableProperty('__Rewire__', _set__);
+  addNonEnumerableProperty('__set__', _set__);
+  addNonEnumerableProperty('__reset__', _reset__);
+  addNonEnumerableProperty('__ResetDependency__', _reset__);
+  addNonEnumerableProperty('__with__', _with__);
+  addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
 }
 
 exports.__get__ = _get__;
@@ -3292,7 +3253,7 @@ exports.__set__ = _set__;
 exports.__ResetDependency__ = _reset__;
 exports.__RewireAPI__ = _RewireAPI__;
 
-},{"../actions/admin":1,"./Account/AuthorizedComponent":6,"./Messages":20,"./RouteHandler":32,"react":351,"react-redux":121,"react-virtualized":204}],14:[function(require,module,exports){
+},{"../actions/admin":1,"./Account/AuthorizedComponent":6,"./Messages":20,"./RouteHandler":32,"react":351,"react-cookie":116,"react-redux":121,"react-virtualized":204}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3330,6 +3291,9 @@ var AdminBox = function (_get__2) {
     var _this = _possibleConstructorReturn(this, (AdminBox.__proto__ || Object.getPrototypeOf(AdminBox)).call(this, props));
 
     _this.authorize = ['admin'];
+    _this.state = {
+      window: false
+    };
     return _this;
   }
 
@@ -3350,7 +3314,7 @@ var AdminBox = function (_get__2) {
         )
       );
 
-      return this.shouldBeVisible() ? jsx : null;
+      return jsx;
     }
   }]);
 
@@ -8255,7 +8219,7 @@ function getRoutes(store) {
   return _react2.default.createElement(
     _Route_Component,
     { path: '/', component: _get__('App') },
-    _react2.default.createElement(_IndexRoute_Component, { authorize: ['client', 'admin'], component: _get__('Home'), onLeave: clearMessages }),
+    _react2.default.createElement(_IndexRoute_Component, { authorize: ['user', 'admin'], component: _get__('Home'), onLeave: clearMessages }),
     _react2.default.createElement(_Route_Component2, { path: '/contact', component: _get__('Contact'), onEnter: ensureAuthenticated, onLeave: clearMessages }),
     _react2.default.createElement(
       _Route_Component3,

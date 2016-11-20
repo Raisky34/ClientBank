@@ -2,15 +2,15 @@ import React, { PropTypes } from 'react';
 import _ from 'lodash';
 
 class AuthorizedComponent extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     const { routes } = this.props; // array of routes
     const { router } = this.context;
+    let role = null;
 
     // check if user data available
-		debugger;
-		console.log(localStorage);
     const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
+
+    if (!user || user.role == undefined) {
       // redirect to login if not
       router.push('/login');
     }
@@ -31,10 +31,10 @@ class AuthorizedComponent extends React.Component {
 
 AuthorizedComponent.propTypes = {
 	routes: PropTypes.array.isRequired
-}
+};
 
 AuthorizedComponent.contextTypes = {
 	router: PropTypes.object.isRequired
-}
+};
 
 export default AuthorizedComponent;
