@@ -82,7 +82,7 @@ exports.signupPost = function(req, res, next) {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-			role: 'client'
+      role: 'client'
     });
     user.save(function(err) {
     res.send({ token: generateToken(user), user: user });
