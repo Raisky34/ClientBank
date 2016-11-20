@@ -81,7 +81,8 @@ exports.signupPost = function(req, res, next) {
     user = new User({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+			role: 'client'
     });
     user.save(function(err) {
     res.send({ token: generateToken(user), user: user });
@@ -161,7 +162,7 @@ exports.unlink = function(req, res, next) {
         break;
       case 'github':
           user.github = undefined;
-        break;      
+        break;
       default:
         return res.status(400).send({ msg: 'Invalid OAuth Provider' });
     }
