@@ -13,6 +13,8 @@ import Operations from './components/Operations';
 import Products from './components/Products';
 import OperationHistory from './components/OperationHistory';
 import MobileTransaction from './components/Operations/Mobile/mobileTransaction';
+import Admin from './components/Admin';
+import AdminBox from './components/AdminBox';
 
 export default function getRoutes(store) {
   const ensureAuthenticated = (nextState, replace) => {
@@ -32,9 +34,11 @@ export default function getRoutes(store) {
   };
   return (
     <Route path="/" component={App}>
-      <IndexRoute component={Home} onLeave={clearMessages}/>
+      <IndexRoute authorize={['client', 'admin']} component={Home} onLeave={clearMessages}/>
       <Route path="/contact" component={Contact} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
-      <Route path="/admin" component={Login} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
+				<Route authorize={['admin']} component={Admin} onLeave={clearMessages}>
+				<Route component={AdminBox} path="/adminbox" />
+			</Route>
       <Route path="/login" component={Login} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
       <Route path="/signup" component={Signup} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
       <Route path="/account" component={Profile} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
