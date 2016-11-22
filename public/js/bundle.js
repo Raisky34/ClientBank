@@ -117,6 +117,7 @@ function signup(name, email, password) {
             token: json.token,
             user: json.user
           });
+          localStorage.setItem('user', JSON.stringify(json.user));
           _get__('browserHistory').push('/');
           _get__('cookie').save('token', json.token, { expires: _get__('moment')().add(1, 'hour').toDate() });
         } else {

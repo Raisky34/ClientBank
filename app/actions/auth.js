@@ -55,6 +55,7 @@ export function signup(name, email, password) {
             token: json.token,
             user: json.user
           });
+          localStorage.setItem('user', JSON.stringify(json.user));
           browserHistory.push('/');
           cookie.save('token', json.token, { expires: moment().add(1, 'hour').toDate() });
         } else {
