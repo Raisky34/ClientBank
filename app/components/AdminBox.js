@@ -20,7 +20,7 @@ class AdminBox extends RoleAwareComponent {
         </div>
       </div>
     );
-    
+
     return jsx;
   }
 }
