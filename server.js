@@ -30,6 +30,8 @@ var User = require('./models/User');
 var userController = require('./controllers/user');
 var contactController = require('./controllers/contact');
 var mobileController = require('./controllers/mobileController');
+var cardController = require('./controllers/cardController');
+var transactionController = require('./controllers/transactionController');
 
 // React and Server-Side Rendering
 var routes = require('./app/routes');
@@ -93,6 +95,10 @@ app.use(function(req, res, next) {
 });
 
 app.post('/contact', contactController.contactPost);
+
+app.post('/card/new', cardController.cardPost);
+app.post('/transfer', transactionController.transactionPost);
+
 app.put('/account', userController.ensureAuthenticated, userController.accountPut);
 app.delete('/account', userController.ensureAuthenticated, userController.accountDelete);
 app.post('/signup', userController.signupPost);
