@@ -3,9 +3,6 @@ import cookie from 'react-cookie';
 import { browserHistory } from 'react-router';
 
 export function getAll(userId) {
-    // dispatch({
-    //   type: 'CLEAR_MESSAGES'
-    // });
     return fetch('/card/getAll', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -47,9 +44,6 @@ export function create(number, fullName, cvc, month, year, userId) {
             balance: json.card.balance,
             card: json.card
           });
-           localStorage.setItem('balance', JSON.stringify(json.card.balance));
-          // cookie.save('token', json.token, { expires: moment().add(1, 'hour').toDate() });
-          // browserHistory.push('/account');
         });
       } else {
         return response.json().then((json) => {

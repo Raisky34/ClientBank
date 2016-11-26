@@ -29,25 +29,19 @@ exports.getAll = function(req, res, next) {
   async.waterfall([
     function(done) {
       User.findById(req.body.userId, function(err, user) {
-        console.log('findId');
         done(err, user);
       });
     },
     function(user, done) {
-      console.log(user._id);
-      console.log('map');
       user.card.map((id) => {
         asyncArray.push((done) => {
           Card.findById(id, function(err, card) {
-            console.log('push');
             cardsArray.push(card);
             done();
           });
         })
       });
       asyncArray.push((done) => {
-        console.log('response');
-        console.log(cardsArray);
         res.send({ cards: cardsArray });
         done();
       });

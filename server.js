@@ -99,6 +99,7 @@ app.post('/contact', contactController.contactPost);
 app.post('/card/new', cardController.cardPost);
 app.post('/card/getAll', cardController.getAll);
 app.post('/transfer', transactionController.transactionPost);
+app.post('/transfers/getAll', transactionController.getAll);
 
 app.put('/account', userController.ensureAuthenticated, userController.accountPut);
 app.delete('/account', userController.ensureAuthenticated, userController.accountDelete);
