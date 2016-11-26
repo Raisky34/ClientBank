@@ -421,6 +421,7 @@ exports.default = _RewireAPI__;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getAll = getAll;
 exports.create = create;
 
 var _moment = require('moment');
@@ -435,7 +436,28 @@ var _reactRouter = require('react-router');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function create(number, fullName, cvc, month, year) {
+function getAll(userId) {
+  // dispatch({
+  //   type: 'CLEAR_MESSAGES'
+  // });
+  return fetch('/card/getAll', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: userId
+    })
+  }).then(function (response) {
+    if (response.ok) {
+      return response.json().then(function (json) {
+        return json;
+      });
+    } else {
+      return [];
+    }
+  });
+}
+
+function create(number, fullName, cvc, month, year, userId) {
   return function (dispatch) {
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -448,24 +470,25 @@ function create(number, fullName, cvc, month, year) {
         fullName: fullName,
         cvc: cvc,
         month: month,
-        year: year
+        year: year,
+        userId: userId
       })
     }).then(function (response) {
       if (response.ok) {
         return response.json().then(function (json) {
           dispatch({
-            type: 'LOGIN_SUCCESS',
-            balance: json.balance,
+            type: 'CARD_SUCCESS',
+            balance: json.card.balance,
             card: json.card
           });
-          // localStorage.setItem('user', JSON.stringify(json.user));
+          localStorage.setItem('balance', JSON.stringify(json.card.balance));
           // cookie.save('token', json.token, { expires: moment().add(1, 'hour').toDate() });
           // browserHistory.push('/account');
         });
       } else {
         return response.json().then(function (json) {
           dispatch({
-            type: 'LOGIN_FAILURE',
+            type: 'NO_CARD_SUCCESS',
             messages: Array.isArray(json) ? json : [json]
           });
         });
@@ -4253,11 +4276,6 @@ var Header = function (_get__$Component) {
         { className: 'nav navbar-nav navbar-right' },
         _react2.default.createElement(
           'li',
-          null,
-          'Balance: Price'
-        ),
-        _react2.default.createElement(
-          'li',
           { className: 'dropdown' },
           _react2.default.createElement(
             'a',
@@ -7239,10 +7257,17 @@ var Products = function (_get__$Component) {
   function Products(props) {
     _classCallCheck(this, Products);
 
-    var _this = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this, props));
+    var _this2 = _possibleConstructorReturn(this, (Products.__proto__ || Object.getPrototypeOf(Products)).call(this, props));
 
-    _this.state = { number: '', fullname: '', cvc: '', month: '', year: '' };
-    return _this;
+    _this2.state = {
+      number: '',
+      fullname: '',
+      cvc: '',
+      month: '',
+      year: '',
+      cards: []
+    };
+    return _this2;
   }
 
   _createClass(Products, [{
@@ -7254,16 +7279,57 @@ var Products = function (_get__$Component) {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
       event.preventDefault();
-      this.props.dispatch(_get__('create')(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year));
+      this.props.dispatch(_get__('create')(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year, JSON.parse(localStorage.getItem('user'))._id));
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this = this;
+      _get__('getAll')(JSON.parse(localStorage.getItem('user'))._id).then(function (response) {
+        _this.setState({ cards: response.cards });
+      });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _Messages_Component = _get__('Messages');
-
+      var _this = this;
       return _react2.default.createElement(
         'div',
         { className: 'container' },
+        this.state.cards.map(function (card) {
+          if (card) {
+            return _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'ul',
+                null,
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  card._id
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  card.year
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  card.month
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  card.balance
+                )
+              )
+            );
+          } else {
+            return;
+          }
+        }),
         _react2.default.createElement(
           'div',
           { className: 'panel' },
@@ -7279,7 +7345,6 @@ var Products = function (_get__$Component) {
           _react2.default.createElement(
             'div',
             { className: 'panel-body' },
-            _react2.default.createElement(_Messages_Component, { messages: this.props.messages }),
             _react2.default.createElement(
               'form',
               { onSubmit: this.handleSubmit.bind(this), className: 'form-horizontal' },
@@ -7415,8 +7480,8 @@ function _get_original__(variableName) {
     case 'create':
       return _card.create;
 
-    case 'Messages':
-      return _Messages2.default;
+    case 'getAll':
+      return _card.getAll;
 
     case 'React':
       return _react2.default;

@@ -1,13 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Messages from './Messages';
-import { create } from '../actions/card';
+import { create, getAll } from '../actions/card';
 import Product from './Operations/Products/Product';
 
 class Products extends React.Component {
 	constructor(props) {
     super(props);
-    this.state = { number: '', fullname: '', cvc: '', month: '', year: '' };
+    this.state = {
+			number: '',
+			fullname: '',
+			cvc: '',
+			month: '',
+			year: '',
+			cards: []
+		 };
   }
 
   handleChange(event) {
@@ -16,18 +23,42 @@ class Products extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.dispatch(create(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year));
+    this.props.dispatch(create(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id));
   }
+	componentDidMount() {
+		let _this = this;
+		getAll(JSON.parse(localStorage.getItem('user'))._id)
+			.then((response) => {
+				_this.setState({ cards: response.cards });
+			});
+	}
 
 	render() {
+		let _this = this;
 		return (
       <div className="container">
+				{
+					this.state.cards.map(card => {
+						if (card) {
+							return <div>
+								<ul>
+								<li>{card._id}</li>
+								<li>{card.year}</li>
+								<li>{card.month}</li>
+								<li>{card.balance}</li>
+							</ul>
+							</div>;
+						} else {
+							return;
+						}
+
+					})
+				}
         <div className="panel">
           <div className="panel-heading">
             <h3 className="panel-title">Contact Form</h3>
           </div>
           <div className="panel-body">
-            <Messages messages={this.props.messages}/>
             <form onSubmit={this.handleSubmit.bind(this)} className="form-horizontal">
               <div className="form-group">
                 <label htmlFor="name" className="col-sm-2">Number</label>

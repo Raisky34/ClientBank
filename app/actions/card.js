@@ -2,7 +2,28 @@ import moment from 'moment';
 import cookie from 'react-cookie';
 import { browserHistory } from 'react-router';
 
-export function create(number, fullName, cvc, month, year) {
+export function getAll(userId) {
+    // dispatch({
+    //   type: 'CLEAR_MESSAGES'
+    // });
+    return fetch('/card/getAll', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: userId
+      })
+    }).then((response) => {
+      if (response.ok) {
+        return response.json().then((json) => {
+          return json;
+        });
+      } else {
+        return [];
+      }
+    });
+}
+
+export function create(number, fullName, cvc, month, year, userId) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -15,24 +36,25 @@ export function create(number, fullName, cvc, month, year) {
         fullName: fullName,
         cvc: cvc,
         month: month,
-        year: year
+        year: year,
+        userId: userId
       })
     }).then((response) => {
       if (response.ok) {
         return response.json().then((json) => {
           dispatch({
-            type: 'LOGIN_SUCCESS',
-            balance: json.balance,
+            type: 'CARD_SUCCESS',
+            balance: json.card.balance,
             card: json.card
           });
-          // localStorage.setItem('user', JSON.stringify(json.user));
+           localStorage.setItem('balance', JSON.stringify(json.card.balance));
           // cookie.save('token', json.token, { expires: moment().add(1, 'hour').toDate() });
           // browserHistory.push('/account');
         });
       } else {
         return response.json().then((json) => {
           dispatch({
-            type: 'LOGIN_FAILURE',
+            type: 'NO_CARD_SUCCESS',
             messages: Array.isArray(json) ? json : [json]
           });
         });

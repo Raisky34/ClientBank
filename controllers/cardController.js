@@ -19,8 +19,41 @@ exports.cardDelete = function(req, res, next) {
 
 exports.getInfo = function(req, res, next) {
   Card.get({ _id: req.card.id }, function(err) {
-    res.send({ msg: 'Your card has been permanently deleted.' });
+    res.send({ card: 'Your card has been permanently deleted.' });
   });
+};
+
+exports.getAll = function(req, res, next) {
+  var cardsArray = [];
+  var asyncArray = [];
+  async.waterfall([
+    function(done) {
+      User.findById(req.body.userId, function(err, user) {
+        console.log('findId');
+        done(err, user);
+      });
+    },
+    function(user, done) {
+      console.log(user._id);
+      console.log('map');
+      user.card.map((id) => {
+        asyncArray.push((done) => {
+          Card.findById(id, function(err, card) {
+            console.log('push');
+            cardsArray.push(card);
+            done();
+          });
+        })
+      });
+      asyncArray.push((done) => {
+        console.log('response');
+        console.log(cardsArray);
+        res.send({ cards: cardsArray });
+        done();
+      });
+      async.waterfall(asyncArray);
+    }
+  ]);
 };
 
 
@@ -47,11 +80,13 @@ exports.cardPost = function(req, res, next) {
         year: req.body.year,
         balance: 500
       });
-      User.findById({ req.user.id }, function(err, user) {
-        user.card.push(card._id);
-      });
       card.save(function(err) {
         res.send({ card: card });
+      });
+      let cardId = card._id;
+      User.findById(req.body.userId, function(err, user) {
+        user.card.push(cardId);
+        user.save();
       });
     });
 };
