@@ -13,7 +13,6 @@ class Header extends React.Component {
     const active = { borderBottomColor: '#3f51b5' };
     const rightNav = this.props.token ? (
       <ul className="nav navbar-nav navbar-right">
-        <li>Balance: Price</li>
         <li className="dropdown">
           <a href="#" data-toggle="dropdown" className="navbar-avatar dropdown-toggle">
             <img src={this.props.user.picture || this.props.user.gravatar}/>

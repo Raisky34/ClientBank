@@ -10,7 +10,7 @@ var schemaOptions = {
 };
 
 var cardSchema = new mongoose.Schema({
-  numer: String,
+  number: String,
   fullName: String,
   cvc: String,
   month: String,

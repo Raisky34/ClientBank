@@ -1,14 +1,14 @@
-export function submitContactForm(operator, number, price) {
+export function submitContactForm(billFrom, billTo, price) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
     });
-    return fetch('/mobileTransaction', {
+    return fetch('/transfer', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        operator: operator,
-        number: number,
+        billFrom: billFrom,
+        billTo: billTo,
         price: price
       })
     }).then((response) => {

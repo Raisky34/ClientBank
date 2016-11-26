@@ -6,6 +6,8 @@ var moment = require('moment');
 var request = require('request');
 var qs = require('querystring');
 var Card = require('../models/Card');
+var User = require('../models/User');
+var Transactions = require('../models/Transactions');
 
 /**
  * POST /transaction
@@ -16,24 +18,39 @@ exports.transactionPost = function(req, res, next) {
   if (errors) {
     return res.status(400).send(errors);
   }
-  Card.findOne({ number: req.body.billFrom }, function(err, card) {
-      if (card) {
-        return res.status(400).send({ msg: 'The card number you have entered is already associated with another account.' });
-      }
-      if (card.balnce >= req.body.price) {
-        card.balnce -=  req.body.price;
-        card.save(function(err) {});
-      } else {
-        res.send({ msg: "Your card don't have money." });
-      }
+  let transactions = new Transactions({
+    billFrom: req.body.billFrom,
+    billTo: req.body.billTo,
+    price: req.body.price
   });
-  Card.findOne({ number: req.body.billTo }, function(err, card) {
-      if (card) {
-        return res.status(400).send({ msg: 'The card number you have entered is already associated with another account.' });
-      }
-      card.balnce +=  req.body.price;
-      card.save(function(err) {
-        res.send({ msg: "Operation successfully." });
+  transactions.save(function(err) {
+    res.send({ transactions: transactions });
+  });
+};
+
+exports.getAll = function(req, res, next) {
+  let transferArray = [];
+  let asyncArray = [];
+  async.waterfall([
+    function(done) {
+      User.findById(req.body.userId, function(err, user) {
+        done(err, user);
       });
-  });
+    },
+    function(user, done) {
+      user.card.map((id) => {
+        asyncArray.push((done) => {
+          Transactions.find({ billFrom: id }, function(err, transaction) {
+            transferArray.push(transaction);
+            done();
+          });
+        })
+      });
+      asyncArray.push((done) => {
+        res.send({ operations: transferArray });
+        done();
+      });
+      async.waterfall(asyncArray);
+    }
+  ]);
 };

@@ -15,7 +15,7 @@ class MobileTransaction extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.dispatch(submitContactForm(this.state.operator, this.state.number, this.state.price));
+    this.props.dispatch(submitContactForm("58399a80106e6e61891798b8", "58399a80106e6e61891798b9", this.state.price));
   }
 
   render() {
