@@ -27,6 +27,12 @@ exports.ensureAuthenticated = function(req, res, next) {
     res.status(401).send({ msg: 'Unauthorized' });
   }
 };
+
+	exports.getUsers = function(req, res, next) {
+		User.find({}, function(err, users) {
+	 		res.send(users);
+ 		});
+	}
   /**
    * POST /login
    * Sign in with email and password
