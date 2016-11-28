@@ -7359,7 +7359,7 @@ var Products = function (_get__$Component) {
                 _react2.default.createElement(
                   'li',
                   null,
-                  card._id
+                  card.number
                 ),
                 _react2.default.createElement(
                   'li',
