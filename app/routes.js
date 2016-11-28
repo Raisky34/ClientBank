@@ -13,8 +13,9 @@ import Operations from './components/Operations';
 import Products from './components/Products';
 import OperationHistory from './components/OperationHistory';
 import MobileTransaction from './components/Operations/Mobile/mobileTransaction';
-import Admin from './components/Admin';
-import AdminBox from './components/AdminBox';
+import Admin from './components/Admin/Admin';
+import AdminBox from './components/Admin/AdminBox';
+import AdminCard from './components/Admin/AdminCard';
 
 export default function getRoutes(store) {
   const ensureAuthenticated = (nextState, replace) => {
@@ -38,6 +39,7 @@ export default function getRoutes(store) {
       <Route path="/contact" component={Contact} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
       <Route authorize={['admin']} component={Admin} onLeave={clearMessages}>
         <Route component={AdminBox} path="/adminbox" />
+				<Route component={AdminCard} path="/admincard" />
       </Route>
       <Route path="/login" component={Login} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
       <Route path="/signup" component={Signup} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>

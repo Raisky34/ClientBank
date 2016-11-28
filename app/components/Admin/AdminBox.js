@@ -1,14 +1,10 @@
 import React from 'react';
-import RoleAwareComponent from './Account/RoleAwareComponent';
+import RoleAwareComponent from '../Account/RoleAwareComponent';
 import { List } from 'react-virtualized';
-import { getAllUsers } from '../actions/admin';
+import { getAllUsers } from '../../actions/admin';
 
 
-	const list = [
-'Brian Vaughn',
-'Baughn',
-'Vaughn'
-];
+	const list = [];
 
 class AdminBox extends RoleAwareComponent {
   constructor(props) {
@@ -38,9 +34,10 @@ class AdminBox extends RoleAwareComponent {
 	 							if (user) {
 	 								return <div>
 	 									<ul>
-	 									<li>{user._id}</li>
-	 									<li>{user.name}</li>
-	 									<li>{user.email}</li>
+	 									<li>User id: {user._id}</li>
+	 									<li>User name: {user.name}</li>
+	 									<li>User email: {user.email}</li>
+										<li>User cards: {user.card} </li>
 	 								</ul>
 	 								</div>;
 	 							} else {

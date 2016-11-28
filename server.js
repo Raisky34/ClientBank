@@ -30,6 +30,7 @@ var User = require('./models/User');
 var userController = require('./controllers/user');
 var contactController = require('./controllers/contact');
 var mobileController = require('./controllers/mobileController');
+var cardController = require('./controllers/cardController');
 
 // React and Server-Side Rendering
 var routes = require('./app/routes');
@@ -101,6 +102,7 @@ app.post('/forgot', userController.forgotPost);
 app.post('/reset/:token', userController.resetPost);
 app.get('/unlink/:provider', userController.ensureAuthenticated, userController.unlink);
 app.post('/allUsers', userController.getUsers);
+app.post('/admincard/new', cardController.newCardPost);
 app.post('/mobileTransaction', mobileController.contactPost);
 
 // React server rendering
