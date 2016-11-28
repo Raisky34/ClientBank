@@ -32,26 +32,51 @@ class Header extends React.Component {
         <li><Link to="/signup" activeStyle={active}>Sign up</Link></li>
       </ul>
     );
+		let leftNav;
+		if(this.props.user) {
+			if(this.props.user.role === 'admin'){
+				leftNav = (
+					<ul className="nav navbar-nav">
+						<li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
+						<li><Link to="/adminbox" activeStyle={active}>Clients info</Link></li>
+						<li><Link to="/admincard" activeStyle={active}>Add card</Link></li>
+					</ul>
+				)
+			}
+			else {
+				leftNav = (
+					<ul className="nav navbar-nav">
+						<li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
+						<li><Link to="/contact" activeStyle={active}>Contact</Link></li>
+						<li><Link to="/operations" activeStyle={active}>Operations</Link></li>
+						<li><Link to="/products" activeStyle={active}>My Products</Link></li>
+						<li><Link to="/history" activeStyle={active}>Operations History</Link></li>
+					</ul>
+				)
+			}
+		}
+		else {
+			leftNav = (
+				<ul className="nav navbar-nav">
+					<li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
+				</ul>
+			)
+		}
+
     return (
-      <nav className="navbar navbar-default navbar-static-top">
-        <div className="container">
-          <div className="navbar-header">
-            <button type="button" data-toggle="collapse" data-target="#navbar" className="navbar-toggle collapsed">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <IndexLink to="/" className="navbar-brand">Project name</IndexLink>
-          </div>
-          <div id="navbar" className="navbar-collapse collapse">
-            <ul className="nav navbar-nav">
-              <li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
-              <li><Link to="/contact" activeStyle={active}>Contact</Link></li>
-              <li><Link to="/operations" activeStyle={active}>Operations</Link></li>
-              <li><Link to="/products" activeStyle={active}>My Products</Link></li>
-              <li><Link to="/history" activeStyle={active}>Operations History</Link></li>
-            </ul>
+			<nav className="navbar navbar-default navbar-static-top">
+				<div className="container">
+					<div className="navbar-header">
+						<button type="button" data-toggle="collapse" data-target="#navbar" className="navbar-toggle collapsed">
+							<span className="sr-only">Toggle navigation</span>
+							<span className="icon-bar"></span>
+							<span className="icon-bar"></span>
+							<span className="icon-bar"></span>
+						</button>
+						<IndexLink to="/" className="navbar-brand">Project name</IndexLink>
+					</div>
+					<div id="navbar" className="navbar-collapse collapse">
+						{leftNav}
             {rightNav}
           </div>
         </div>

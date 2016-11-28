@@ -108,6 +108,8 @@ app.post('/login', userController.loginPost);
 app.post('/forgot', userController.forgotPost);
 app.post('/reset/:token', userController.resetPost);
 app.get('/unlink/:provider', userController.ensureAuthenticated, userController.unlink);
+app.post('/allUsers', userController.getUsers);
+app.post('/admincard/new', cardController.newCardPost);
 app.post('/mobileTransaction', mobileController.contactPost);
 
 // React server rendering

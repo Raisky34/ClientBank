@@ -1,27 +1,51 @@
-export function getAllUsers(){
-	return (dispatch) => {
-		dispatch({
-			type: 'CLEAR_MESSAGES'
-		});
-		return fetch('/allUsers', {
-			method: 'get',
-			headers: { 'Content-Type': 'application/json' },
-		}).then((response) => {
+export function getAllUsers() {
+    return fetch('/allUsers', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+    }).then((response) => {
+        if (response.ok) {
+            return response.json().then((json) => {
+                return json;
+            });
+        } else {
+            return [];
+        }
+    });
+}
+
+export function addNewCard(number, fullName, cvc, month, year, userId) {
+  return (dispatch) => {
+    dispatch({
+      type: 'CLEAR_MESSAGES'
+    });
+    return fetch('/admincard/new', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        number: number,
+        fullName: fullName,
+        cvc: cvc,
+        month: month,
+        year: year,
+        userId: userId
+      })
+    }).then((response) => {
       if (response.ok) {
-        return response.json().then((data) => {
+        return response.json().then((json) => {
           dispatch({
-            type: 'GET_USERS_SUCCESS',
-						payload: data
+            type: 'ADD_CARD_SUCCESS',
+            balance: json.card.balance,
+            card: json.card
           });
         });
       } else {
         return response.json().then((json) => {
           dispatch({
-            type: 'GET_USERS_FAILURE',
+            type: 'ADD_CARD_FAIL',
             messages: Array.isArray(json) ? json : [json]
           });
         });
       }
     });
-	};
+  };
 }

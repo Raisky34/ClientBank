@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux'
-import Messages from './Messages';
+import { connect } from 'react-redux';
+import Messages from '../Messages';
 import cookie from 'react-cookie';
-import { List } from 'react-virtualized';
-import { getAllUsers } from '../actions/admin';
-import AuthorizedComponent from './Account/AuthorizedComponent';
-import RouteHandler from './RouteHandler';
+import AuthorizedComponent from '../Account/AuthorizedComponent';
+import RouteHandler from '../RouteHandler';
 
 class Admin extends AuthorizedComponent {
 
