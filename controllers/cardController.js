@@ -67,7 +67,7 @@ exports.cardPost = function(req, res, next) {
         return res.status(400).send({ msg: 'The card number you have entered is already associated with another account.' });
       }
       card = new Card({
-        numer: req.body.numer,
+        number: req.body.number,
         fullName: req.body.fullName,
         cvc: req.body.cvc,
         month: req.body.month,

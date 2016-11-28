@@ -42,7 +42,7 @@ class Products extends React.Component {
 						if (card) {
 							return <div>
 								<ul>
-								<li>{card._id}</li>
+								<li>{card.number}</li>
 								<li>{card.year}</li>
 								<li>{card.month}</li>
 								<li>{card.balance}</li>
