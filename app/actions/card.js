@@ -20,12 +20,12 @@ export function getAll(userId) {
     });
 }
 
-export function create(number, fullName, cvc, month, year, userId) {
+export function addExisting(number, fullName, cvc, month, year, userId) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
     });
-    return fetch('/card/new', {
+    return fetch('/card/addExisting', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
