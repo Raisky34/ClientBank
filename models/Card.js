@@ -14,7 +14,7 @@ var cardSchema = new mongoose.Schema({
   fullName: String,
   cvc: String,
   month: String,
-  year: Date,
+  year: String,
   balance: String
 }, schemaOptions);
 

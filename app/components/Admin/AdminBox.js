@@ -28,17 +28,16 @@ class AdminBox extends RoleAwareComponent {
     const jsx = (
       <div className="pure-u-13-24 box photo-box">
         <div className="box-wrapper">
-          <h1>Your admin</h1>
+					<h2>List of all users</h2>
 	 					{
 	 						this.state.users.map(user => {
 	 							if (user) {
 	 								return <div>
-	 									<ul>
-	 									<li>User id: {user._id}</li>
-	 									<li>User name: {user.name}</li>
-	 									<li>User email: {user.email}</li>
-										<li>User cards: {user.card} </li>
-	 								</ul>
+										<ul className="list-group">
+									    <li className="list-group-item">User id: {user._id}</li>
+									    <li className="list-group-item">User name: {user.name}</li>
+									    <li className="list-group-item">User email: {user.email}</li>
+									  </ul>
 	 								</div>;
 	 							} else {
 	 								return;

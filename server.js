@@ -96,7 +96,7 @@ app.use(function(req, res, next) {
 
 app.post('/contact', contactController.contactPost);
 
-app.post('/card/new', cardController.cardPost);
+app.post('/card/addExisting', cardController.cardPost);
 app.post('/card/getAll', cardController.getAll);
 app.post('/transfer', transactionController.transactionPost);
 app.post('/transfers/getAll', transactionController.getAll);

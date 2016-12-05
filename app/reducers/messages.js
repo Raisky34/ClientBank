@@ -11,6 +11,8 @@ export default function messages(state = {}, action) {
     case 'OAUTH_FAILURE':
     case 'UNLINK_FAILURE':
     case 'LINK_FAILURE':
+		case 'ADD_CARD_FAIL':
+		case 'NO_CARD_SUCCESS':
       return {
         error: action.messages
       };
@@ -19,6 +21,8 @@ export default function messages(state = {}, action) {
     case 'RESET_PASSWORD_SUCCESS':
     case 'CONTACT_FORM_SUCCESS':
     case 'TRANSACTION_FORM_SUCCESS':
+		case 'ADD_CARD_SUCCESS':
+		case 'CARD_SUCCESS':
       return {
         success: action.messages
       };

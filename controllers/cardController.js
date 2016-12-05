@@ -7,6 +7,7 @@ var request = require('request');
 var qs = require('querystring');
 var Card = require('../models/Card');
 var User = require('../models/User');
+var _ = require('underscore');
 
 /**
  * DELETE /account
@@ -58,42 +59,6 @@ exports.newCardPost = function(req, res, next) {
     return res.status(400).send(errors);
   }
   Card.findOne({ number: req.body.number }, function(err, card) {
-			console.log('find card');
-      if (card) {
-        isNewCard = false;
-        return res.status(400).send({ msg: 'The card number you have entered is already associated with another account.' });
-      }
-      card = new Card({
-        numer: req.body.numer,
-        fullName: req.body.fullName,
-        cvc: req.body.cvc,
-        month: req.body.month,
-        year: req.body.year,
-        balance: 500
-      });
-			console.log('save card');
-      card.save(function(err) {
-        res.send({ card: card });
-      });
-      let cardId = card._id;
-      User.findById(req.body.userId, function(err, user) {
-        user.card.push(cardId);
-        user.save();
-      });
-    });
-};
-
-
-/**
- * POST /card
- */
-exports.cardPost = function(req, res, next) {
-  var errors = req.validationErrors();
-  var isNewCard = true;
-  if (errors) {
-    return res.status(400).send(errors);
-  }
-  Card.findOne({ number: req.body.number }, function(err, card) {
       if (card) {
         isNewCard = false;
         return res.status(400).send({ msg: 'The card number you have entered is already associated with another account.' });
@@ -106,13 +71,56 @@ exports.cardPost = function(req, res, next) {
         year: req.body.year,
         balance: 500
       });
+
       card.save(function(err) {
         res.send({ card: card });
       });
+    });
+};
+
+
+/**
+ * POST /card
+ */
+exports.cardPost = function(req, res, next) {
+  var errors = req.validationErrors();
+  var isNewCard = false;
+  if (errors) {
+    return res.status(400).send(errors);
+  }
+  Card.findOne({ number: req.body.number }, function(err, card) {
+      if (!card) {
+        isNewCard = true;
+        return res.status(400).send({ msg: 'The card number you have entered not exist.' });
+      }
+
       let cardId = card._id;
       User.findById(req.body.userId, function(err, user) {
-        user.card.push(cardId);
-        user.save();
+				var result = -1;
+				for (var i = 0; i < user.card.length; i++) {
+					if (user.card[i].toString() === cardId.toString()) {
+						result = 1;
+					}
+				}
+				if(result == -1){
+					if(req.body.number === card.number &&
+						 req.body.fullName === card.fullName &&
+						 req.body.cvc === card.cvc &&
+						 req.body.month === card.month &&
+						 req.body.year === card.year
+						){
+							 res.send({ card: card });
+					}
+					else {
+						return res.status(400).send({ msg: 'The entered card information is not valid' });
+					}
+					console.log("user save");
+					user.card.push(cardId);
+					user.save();
+				}
+				else {
+					return res.status(400).send({ msg: 'Card already added to your account' });
+				}
       });
     });
 };

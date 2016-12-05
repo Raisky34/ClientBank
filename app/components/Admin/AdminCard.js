@@ -26,7 +26,7 @@ class AdminCard extends RoleAwareComponent {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.dispatch(addNewCard(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year , this.state.userId));
+		this.props.dispatch(addNewCard(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year));
 	}
 
 	render() {
@@ -39,16 +39,10 @@ class AdminCard extends RoleAwareComponent {
           <div className="panel-body">
             <Messages messages={this.props.messages}/>
             <form onSubmit={this.handleSubmit.bind(this)} className="form-horizontal">
-							<div className="form-group">
-								<label htmlFor="userId" className="col-sm-2">User id</label>
-								<div className="col-sm-8">
-									<input type="text" name="userId" id="userId" className="form-control" value={this.state.userId} onChange={this.handleChange.bind(this)} autoFocus/>
-								</div>
-							</div>
               <div className="form-group">
                 <label htmlFor="number" className="col-sm-2">Card number</label>
                 <div className="col-sm-8">
-                  <input type="text" name="number" id="number" className="form-control" value={this.state.number} onChange={this.handleChange.bind(this)}/>
+                  <input type="text" name="number" id="number" className="form-control" value={this.state.number} onChange={this.handleChange.bind(this)} autoFocus />
                 </div>
               </div>
               <div className="form-group">

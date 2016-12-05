@@ -13,7 +13,7 @@ export function getAllUsers() {
     });
 }
 
-export function addNewCard(number, fullName, cvc, month, year, userId) {
+export function addNewCard(number, fullName, cvc, month, year) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -26,8 +26,7 @@ export function addNewCard(number, fullName, cvc, month, year, userId) {
         fullName: fullName,
         cvc: cvc,
         month: month,
-        year: year,
-        userId: userId
+        year: year
       })
     }).then((response) => {
       if (response.ok) {
