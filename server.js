@@ -32,6 +32,7 @@ var contactController = require('./controllers/contact');
 var mobileController = require('./controllers/mobileController');
 var cardController = require('./controllers/cardController');
 var transactionController = require('./controllers/transactionController');
+var billController = require('./controllers/billController');
 
 // React and Server-Side Rendering
 var routes = require('./app/routes');
@@ -100,7 +101,15 @@ app.post('/card/addExisting', cardController.cardPost);
 app.post('/card/getAll', cardController.getAll);
 app.post('/transfer', transactionController.transactionPost);
 app.post('/transfers/getAll', transactionController.getAll);
+app.post('/mobileTransaction', mobileController.contactPost);
+app.post('/findBill', billController.getBillInfo);
 
+//admin
+app.post('/allUsers', userController.getUsers);
+app.post('/admincard/new', cardController.newCardPost);
+app.post('/adminbill/create', billController.createBillPost);
+
+//account
 app.put('/account', userController.ensureAuthenticated, userController.accountPut);
 app.delete('/account', userController.ensureAuthenticated, userController.accountDelete);
 app.post('/signup', userController.signupPost);
@@ -108,9 +117,7 @@ app.post('/login', userController.loginPost);
 app.post('/forgot', userController.forgotPost);
 app.post('/reset/:token', userController.resetPost);
 app.get('/unlink/:provider', userController.ensureAuthenticated, userController.unlink);
-app.post('/allUsers', userController.getUsers);
-app.post('/admincard/new', cardController.newCardPost);
-app.post('/mobileTransaction', mobileController.contactPost);
+
 
 // React server rendering
 app.use(function(req, res) {

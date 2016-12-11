@@ -40,6 +40,7 @@ class Header extends React.Component {
 						<li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
 						<li><Link to="/adminbox" activeStyle={active}>Clients info</Link></li>
 						<li><Link to="/admincard" activeStyle={active}>Add card</Link></li>
+						<li><Link to="/adminbill" activeStyle={active}>Add bank bill</Link></li>
 					</ul>
 				)
 			}

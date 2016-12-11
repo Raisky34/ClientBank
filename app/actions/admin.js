@@ -13,7 +13,7 @@ export function getAllUsers() {
     });
 }
 
-export function addNewCard(number, fullName, cvc, month, year) {
+export function addNewCard(number, fullName, bankName, cvc, month, year) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -24,6 +24,7 @@ export function addNewCard(number, fullName, cvc, month, year) {
       body: JSON.stringify({
         number: number,
         fullName: fullName,
+				bankName: bankName,
         cvc: cvc,
         month: month,
         year: year
@@ -41,6 +42,38 @@ export function addNewCard(number, fullName, cvc, month, year) {
         return response.json().then((json) => {
           dispatch({
             type: 'ADD_CARD_FAIL',
+            messages: Array.isArray(json) ? json : [json]
+          });
+        });
+      }
+    });
+  };
+}
+
+export function addBankBill(number, bankName) {
+  return (dispatch) => {
+    dispatch({
+      type: 'CLEAR_MESSAGES'
+    });
+    return fetch('/adminbill/create', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        number: number,
+        bankName: bankName
+      })
+    }).then((response) => {
+      if (response.ok) {
+        return response.json().then((json) => {
+          dispatch({
+            type: 'CREATE_BILL_SUCCESS',
+            bill: json.bill
+          });
+        });
+      } else {
+        return response.json().then((json) => {
+          dispatch({
+            type: 'CREATE_BILL_FAIL',
             messages: Array.isArray(json) ? json : [json]
           });
         });

@@ -28,12 +28,11 @@ class OperationHistory extends React.Component {
 				_this.state.operations.map((operation) => {
 					if (operation && operation.length != 0) {
 						return <div>
-							<ul>
-								<li>{operation[0].billFrom}</li>
-								<li>{operation[0].billTo}</li>
-								<li>{operation[0].price}</li>
+							<ul className="list-group">
+								<li className="list-group-item">Bill from: {operation[0].billFrom} <span className="badge">{operation[0].price}</span></li>
+								<li className="list-group-item">Bill to: {operation[0].billTo} </li>
 							</ul>
-						</div>;
+						</div>
 					}
 				})
 			}

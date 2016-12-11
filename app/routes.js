@@ -16,6 +16,7 @@ import MobileTransaction from './components/Operations/Mobile/mobileTransaction'
 import Admin from './components/Admin/Admin';
 import AdminBox from './components/Admin/AdminBox';
 import AdminCard from './components/Admin/AdminCard';
+import AdminBill from './components/Admin/AdminBill';
 
 export default function getRoutes(store) {
   const ensureAuthenticated = (nextState, replace) => {
@@ -40,6 +41,7 @@ export default function getRoutes(store) {
       <Route authorize={['admin']} component={Admin} onLeave={clearMessages}>
         <Route component={AdminBox} path="/adminbox" />
 				<Route component={AdminCard} path="/admincard" />
+				<Route component={AdminBill} path="/adminbill" />
       </Route>
       <Route path="/login" component={Login} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
       <Route path="/signup" component={Signup} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
