@@ -12,6 +12,7 @@ var schemaOptions = {
 var cardSchema = new mongoose.Schema({
   number: String,
   fullName: String,
+	bankName: String,
   cvc: String,
   month: String,
   year: String,

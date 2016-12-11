@@ -10,10 +10,10 @@ class AdminCard extends RoleAwareComponent {
 		this.state = {
 			number: '',
 			fullname: '',
+			bankName: '',
 			cvc: '',
 			month: '',
-			year: '',
-			userId: ''
+			year: ''
  		};
 
 		// component will be visible for the roles below:
@@ -26,7 +26,7 @@ class AdminCard extends RoleAwareComponent {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.dispatch(addNewCard(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year));
+		this.props.dispatch(addNewCard(this.state.number, this.state.fullname, this.state.bankName, this.state.cvc, this.state.month, this.state.year));
 	}
 
 	render() {
@@ -45,6 +45,12 @@ class AdminCard extends RoleAwareComponent {
                   <input type="text" name="number" id="number" className="form-control" value={this.state.number} onChange={this.handleChange.bind(this)} autoFocus />
                 </div>
               </div>
+							<div className="form-group">
+								<label htmlFor="bankName" className="col-sm-2">Client full name</label>
+								<div className="col-sm-8">
+									<input type="text" name="bankName" id="bankName" className="form-control" value={this.state.bankName} onChange={this.handleChange.bind(this)}/>
+								</div>
+							</div>
               <div className="form-group">
                 <label htmlFor="fullname" className="col-sm-2">Client full name</label>
                 <div className="col-sm-8">

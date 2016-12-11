@@ -7,7 +7,6 @@ var request = require('request');
 var qs = require('querystring');
 var Card = require('../models/Card');
 var User = require('../models/User');
-var _ = require('underscore');
 
 /**
  * DELETE /account
@@ -66,6 +65,7 @@ exports.newCardPost = function(req, res, next) {
       card = new Card({
         number: req.body.number,
         fullName: req.body.fullName,
+				bankName: req.body.bankName,
         cvc: req.body.cvc,
         month: req.body.month,
         year: req.body.year,
@@ -114,7 +114,7 @@ exports.cardPost = function(req, res, next) {
 					else {
 						return res.status(400).send({ msg: 'The entered card information is not valid' });
 					}
-					console.log("user save");
+
 					user.card.push(cardId);
 					user.save();
 				}

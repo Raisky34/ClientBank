@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { submitContactForm } from '../../../actions/mobileTransaction';
+import { submitContactForm, getBillForPay } from '../../../actions/mobileTransaction';
 import Messages from '../../Messages';
 
 class MobileTransaction extends React.Component {
@@ -15,7 +15,9 @@ class MobileTransaction extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.dispatch(submitContactForm("58399a80106e6e61891798b8", "58399a80106e6e61891798b9", this.state.price));
+    this.props.dispatch(submitContactForm("5842c03dd143e41280d5726e", "58399a80106e6e61891798b9", this.state.price));
+		//When added card choose then pass card.bankName to getBillForPay() to get Bill for pay and then take it ID.
+		//this.props.dispatch(submitContactForm("5842c03dd143e41280d5726e", getBillForPay(bankName).id, this.state.price));
   }
 
   render() {
