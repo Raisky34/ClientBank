@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { submitContactForm, getBillForPay } from '../../../actions/mobileTransaction';
 import Messages from '../../Messages';
+import { getAll } from '../../../actions/card';
 import Modal from 'react-modal';
+import Select from 'react-select';
 
 const customStyles = {
   content : {
@@ -22,8 +24,29 @@ class MobileTransaction extends React.Component {
       modalIsOpen: false,
       operator: this.props.operaor || 'Velcom',
       number: '',
-      price: ''
+      price: '',
+      cards: [],
+      choosenCard: ''
     };
+  }
+  componentDidMount() {
+    let _this = this;
+		getAll(JSON.parse(localStorage.getItem('user'))._id)
+			.then((response) => {
+        let newOptions = [];
+				_this.setState({ cards: response.cards });
+        response.cards.map(card => {
+          newOptions.push({
+            value: card.number,
+            label: card.number
+          })
+        });
+        _this.setState({ options: newOptions })
+			});
+  }
+
+  setCard(card) {
+    this.setState({ choosenCard: card });
   }
 
   openModal() {
@@ -39,8 +62,23 @@ class MobileTransaction extends React.Component {
   }
 
   pay() {
-    this.props.dispatch(submitContactForm("5842c03dd143e41280d5726e", "58399a80106e6e61891798b9", this.state.price));
+    let _this = this;
+    let cardId = 0,
+        cardName;
+     this.state.cards.map(card => {
+      if(card.number == _this.state.choosenCard) {
+        cardId = card.id;
+        cardName = card.bankName;
+        return;
+      }
+    })
+    this.props.dispatch(submitContactForm(cardId, getBillForPay(cardName).id, this.state.price));
   }
+
+  logChange(item) {
+    console.log("Selected: " + item.value);
+    this.setState({ choosenCard: item.value })
+}
 
   render() {
     let _this = this;
@@ -50,9 +88,31 @@ class MobileTransaction extends React.Component {
           <div className="panel-heading">
             <h3 className="panel-title">Operator Form</h3>
           </div>
+          <Select
+              name="form-field-name"
+              value="one"
+              options={_this.state.options}
+              onChange={_this.logChange.bind(_this)}
+          />
+        <div>Your choosen card: {_this.state.choosenCard}</div>
+        {/*<div className="dropdown">
+            <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Card number
+            <span className="caret"></span></button>
+            <ul className="dropdown-menu">
+              {
+                this.state.cards.map(card => {
+                  if (card) {
+                    return <li><a>{card.number}</a></li>;
+                  } else {
+                    return;
+                  }
+                })
+              }
+            </ul>
+          </div> */}
           <div className="panel-body">
             <Messages messages={this.props.messages}/>
-            <form onSubmit={this.handleSubmit.bind(this)} className="form-horizontal">
+            <form className="form-horizontal">
               <div className="form-group">
                 <label htmlFor="name" className="col-sm-2">Phone Number</label>
                 <div className="col-sm-8">
@@ -72,16 +132,25 @@ class MobileTransaction extends React.Component {
         <div>
         <Modal
           isOpen={_this.state.modalIsOpen}
-          onAfterOpen={_this.afterOpenModal.bind(_this)}
+          onAfterOpen={_this.afterOpenModal}
           onRequestClose={_this.closeModal.bind(_this)}
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <div>Operator: {_this.state.operator}</div>
-          <div>Phone number: {_this.state.number}</div>
-          <div>Price: {_this.state.price}</div>
-          <button onClick={_this.closeModal.bind(_this)}>close</button>
-          <button onClick={_this.pay.bind(_this)}>Pay</button>
+        <div className='panel panel-default'>
+          <div className='panel-heading'>Operator: {_this.state.operator}</div>
+          <div className='panel-heading'>Card number: {_this.state.choosenCard}</div>
+          <div className='panel-heading'>Phone number: {_this.state.number}</div>
+          <div className='panel-heading'>Price: {_this.state.price}</div>
+        </div>
+        <div className="btn-toolbar" role="toolbar">
+          <div className="btn-group" role="group">
+            <button type="button" className='btn btn-primary' onClick={_this.closeModal.bind(_this)}>close</button>
+          </div>
+          <div className="btn-group" role="toolbar">
+            <button type="button" className='btn btn-primary' onClick={_this.pay.bind(_this)}>Pay</button>
+          </div>
+        </div>
         </Modal>
       </div>
       </div>

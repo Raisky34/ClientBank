@@ -46,7 +46,7 @@ class AdminCard extends RoleAwareComponent {
                 </div>
               </div>
 							<div className="form-group">
-								<label htmlFor="bankName" className="col-sm-2">Client full name</label>
+								<label htmlFor="bankName" className="col-sm-2">Bank name</label>
 								<div className="col-sm-8">
 									<input type="text" name="bankName" id="bankName" className="form-control" value={this.state.bankName} onChange={this.handleChange.bind(this)}/>
 								</div>
