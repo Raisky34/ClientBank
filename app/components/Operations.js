@@ -9,14 +9,8 @@ class Operations extends React.Component {
 			<div className="container-fluid">
 				<div className="row">
 					<MobileOperations />
-					<TransferList />
 				</div>
 				<div className="row">
-					<MobileOperations />
-					<TransferList />
-				</div>
-				<div className="row">
-					<MobileOperations />
 					<TransferList />
 				</div>
 			</div>

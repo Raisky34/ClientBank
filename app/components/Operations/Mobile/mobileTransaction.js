@@ -2,25 +2,48 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { submitContactForm, getBillForPay } from '../../../actions/mobileTransaction';
 import Messages from '../../Messages';
+import Modal from 'react-modal';
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
 
 class MobileTransaction extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { operator: this.props.operaor || 'Velcom', number: '', price: '' };
+    this.state = {
+      modalIsOpen: false,
+      operator: this.props.operaor || 'Velcom',
+      number: '',
+      price: ''
+    };
+  }
+
+  openModal() {
+    this.setState({modalIsOpen: true});
+  }
+
+  closeModal() {
+    this.setState({ modalIsOpen: false });
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  pay() {
     this.props.dispatch(submitContactForm("5842c03dd143e41280d5726e", "58399a80106e6e61891798b9", this.state.price));
-		//When added card choose then pass card.bankName to getBillForPay() to get Bill for pay and then take it ID.
-		//this.props.dispatch(submitContactForm("5842c03dd143e41280d5726e", getBillForPay(bankName).id, this.state.price));
   }
 
   render() {
+    let _this = this;
     return (
       <div className="container">
         <div className="panel">
@@ -42,14 +65,25 @@ class MobileTransaction extends React.Component {
                   <input type="price" name="price" id="price" className="form-control" value={this.state.price} onChange={this.handleChange.bind(this)}/>
                 </div>
               </div>
-              <div className="form-group">
-                <div className="col-sm-offset-2 col-sm-8">
-                  <button type="submit" className="btn btn-success">Send</button>
-                </div>
-              </div>
             </form>
+            <button onClick={_this.openModal.bind(_this)} className="btn btn-success">Send</button>
           </div>
         </div>
+        <div>
+        <Modal
+          isOpen={_this.state.modalIsOpen}
+          onAfterOpen={_this.afterOpenModal.bind(_this)}
+          onRequestClose={_this.closeModal.bind(_this)}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <div>Operator: {_this.state.operator}</div>
+          <div>Phone number: {_this.state.number}</div>
+          <div>Price: {_this.state.price}</div>
+          <button onClick={_this.closeModal.bind(_this)}>close</button>
+          <button onClick={_this.pay.bind(_this)}>Pay</button>
+        </Modal>
+      </div>
       </div>
     );
   }
