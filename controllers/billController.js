@@ -8,7 +8,7 @@ var qs = require('querystring');
 var Bill = require('../models/Bill');
 
 exports.getBillInfo = function(req, res, next) {
-  Bill.findOne({ bankName: req.bill.bankName }, function(err, bill) {
+  Bill.findOne({ bankName: req.body.bankName }, function(err, bill) {
     res.send({ bill: bill});
   });
 };

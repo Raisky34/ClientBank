@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { submitContactForm, getBillForPay } from '../../../actions/mobileTransaction';
+import { submitMobilePay } from '../../../actions/mobileTransaction';
 import Messages from '../../Messages';
 import { getAll } from '../../../actions/card';
 import Modal from 'react-modal';
@@ -64,15 +64,15 @@ class MobileTransaction extends React.Component {
   pay() {
     let _this = this;
     let cardId = 0,
-        cardName;
+        cardBankName;
      this.state.cards.map(card => {
       if(card.number == _this.state.choosenCard) {
         cardId = card.id;
-        cardName = card.bankName;
+        cardBankName = card.bankName;
         return;
       }
     })
-    this.props.dispatch(submitContactForm(cardId, getBillForPay(cardName).id, this.state.price));
+    this.props.dispatch(submitMobilePay(cardId, cardBankName, this.state.price));
   }
 
   logChange(item) {
@@ -144,11 +144,11 @@ class MobileTransaction extends React.Component {
           <div className='panel-heading'>Price: {_this.state.price}</div>
         </div>
         <div className="btn-toolbar" role="toolbar">
+					<div className="btn-group" role="toolbar">
+						<button type="button" className='btn btn-primary' onClick={_this.pay.bind(_this)}>Pay</button>
+					</div>
           <div className="btn-group" role="group">
-            <button type="button" className='btn btn-primary' onClick={_this.closeModal.bind(_this)}>close</button>
-          </div>
-          <div className="btn-group" role="toolbar">
-            <button type="button" className='btn btn-primary' onClick={_this.pay.bind(_this)}>Pay</button>
+            <button type="button" className='btn btn-primary' onClick={_this.closeModal.bind(_this)}>Close</button>
           </div>
         </div>
         </Modal>
