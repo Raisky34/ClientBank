@@ -1,4 +1,4 @@
-export function submitContactForm(billFrom, billTo, price) {
+export function submitMobilePay(billFrom, bankName, price) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -8,7 +8,7 @@ export function submitContactForm(billFrom, billTo, price) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         billFrom: billFrom,
-        billTo: billTo,
+        bankName: bankName,
         price: price
       })
     }).then((response) => {
@@ -23,37 +23,6 @@ export function submitContactForm(billFrom, billTo, price) {
         return response.json().then((json) => {
           dispatch({
             type: 'TRANSACTION_FORM_FAILURE',
-            messages: Array.isArray(json) ? json : [json]
-          });
-        });
-      }
-    });
-  };
-}
-
-export function getBillForPay(bankName) {
-  return (dispatch) => {
-    dispatch({
-      type: 'CLEAR_MESSAGES'
-    });
-    return fetch('/findBill', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        bankName: bankName
-      })
-    }).then((response) => {
-      if (response.ok) {
-        return response.json().then((json) => {
-          dispatch({
-            type: 'FIND_BILL_SUCCESS',
-						bill: json.bill
-          });
-        });
-      } else {
-        return response.json().then((json) => {
-          dispatch({
-            type: 'FIND_BILL_FAILURE',
             messages: Array.isArray(json) ? json : [json]
           });
         });

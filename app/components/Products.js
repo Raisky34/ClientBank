@@ -3,6 +3,19 @@ import { connect } from 'react-redux'
 import Messages from './Messages';
 import { addExisting, getAll } from '../actions/card';
 import Product from './Operations/Products/Product';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
+
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+const style = {
+  marginRight: 20
+};
 
 class Products extends React.Component {
 	constructor(props) {
@@ -13,7 +26,8 @@ class Products extends React.Component {
 			cvc: '',
 			month: '',
 			year: '',
-			cards: []
+			cards: [],
+			open: false
 		 };
   }
 
@@ -33,10 +47,83 @@ class Products extends React.Component {
 			});
 	}
 
+	handleOpen() {
+    this.setState({open: true});
+  };
+
+  handleClose() {
+    this.setState({open: false});
+  };
+
 	render() {
+		const {number, cvc, fullName, month, year} = this.state;
+		let isDisabled = !(number && cvc && fullName && month && year);
+		const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose.bind(this)}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+				disabled={isDisabled}
+        keyboardFocused={true}
+        onTouchTap={this.handleClose.bind(this)}
+      />,
+    ];
+
 		let _this = this;
 		return (
+			<MuiThemeProvider muiTheme={getMuiTheme()}>
       <div className="container">
+				<FloatingActionButton mini={true} secondary={true} style={style} onTouchTap={this.handleOpen.bind(this)}>
+				  <ContentAdd />
+				</FloatingActionButton>
+				<Dialog
+		          title="Add existing card"
+		          actions={actions}
+		          modal={false}
+		          open={this.state.open}
+							autoScrollBodyContent={true}
+		          onRequestClose={this.handleClose}
+		        >
+						<TextField
+							name="number"
+							value={this.state.number}
+							style={style}
+							floatingLabelText="Card number"
+							onChange={this.handleChange.bind(this)}/>
+						&nbsp;
+						<TextField
+							name="fullName"
+							value={this.state.fullName}
+							style={style}
+							floatingLabelText="Full name"
+							onChange={this.handleChange.bind(this)}/>
+						<br/>
+						<TextField
+							name="cvc"
+							value={this.state.cvc}
+							style={style}
+							floatingLabelText="CVC"
+							onChange={this.handleChange.bind(this)}/>
+						&ensp;
+						<TextField
+							name="month"
+							value={this.state.month}
+							style={style}
+							floatingLabelText="Month"
+							onChange={this.handleChange.bind(this)}/>
+						<br/>
+						<TextField
+							name="year"
+							value={this.state.year}
+							style={style}
+							floatingLabelText="Year"
+							onChange={this.handleChange.bind(this)}/>
+						<br/>
+		    </Dialog>
 				<h2>Your cards</h2>
 				{
 					this.state.cards.map(card => {
@@ -53,52 +140,9 @@ class Products extends React.Component {
 
 					})
 				}
-        <div className="panel">
-          <div className="panel-heading">
-            <h3 className="panel-title">Add existing card</h3>
-          </div>
-          <div className="panel-body">
-						<Messages messages={this.props.messages}/>
-            <form onSubmit={this.handleSubmit.bind(this)} className="form-horizontal">
-              <div className="form-group">
-                <label htmlFor="number" className="col-sm-2">Number</label>
-                <div className="col-sm-8">
-                  <input type="text" name="number" id="number" className="form-control" value={this.state.number} onChange={this.handleChange.bind(this)} autoFocus/>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="fullname" className="col-sm-2">Full Name</label>
-                <div className="col-sm-8">
-                  <input type="text" name="fullname" id="fullname" className="form-control" value={this.state.fullname} onChange={this.handleChange.bind(this)}/>
-                </div>
-              </div>
-							<div className="form-group">
-                <label htmlFor="cvc" className="col-sm-2">CVC</label>
-                <div className="col-sm-8">
-                  <input type="text" name="cvc" id="cvc" className="form-control" value={this.state.cvc} onChange={this.handleChange.bind(this)}/>
-                </div>
-              </div>
-							<div className="form-group">
-                <label htmlFor="month" className="col-sm-2">Month</label>
-                <div className="col-sm-8">
-                  <input type="text" name="month" id="month" className="form-control" value={this.state.month} onChange={this.handleChange.bind(this)}/>
-                </div>
-              </div>
-							<div className="form-group">
-                <label htmlFor="year" className="col-sm-2">Year</label>
-                <div className="col-sm-8">
-                  <input type="text" name="year" id="year" className="form-control" value={this.state.year} onChange={this.handleChange.bind(this)}/>
-                </div>
-              </div>
-              <div className="form-group">
-                <div className="col-sm-offset-2 col-sm-8">
-                  <button type="submit" className="btn btn-success">Send</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+
       </div>
+			</MuiThemeProvider>
     );
 	}
 }

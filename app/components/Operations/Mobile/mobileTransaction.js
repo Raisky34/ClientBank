@@ -1,60 +1,209 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { submitContactForm, getBillForPay } from '../../../actions/mobileTransaction';
+import { submitMobilePay } from '../../../actions/mobileTransaction';
 import Messages from '../../Messages';
 import { getAll } from '../../../actions/card';
-import Modal from 'react-modal';
-import Select from 'react-select';
 
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+
+import ExpandTransition from 'material-ui/internal/ExpandTransition';
+import TextField from 'material-ui/TextField';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+
+import {
+  Step,
+  Stepper,
+  StepLabel
+} from 'material-ui/Stepper';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+
+const operatorList = [
+  {
+    name: "VELCOM",
+    value: 1
+  },
+  {
+    name: "MTC",
+    value: 2
+  },
+  {
+    name: "LIFE:)",
+    value: 3
   }
-};
+];
 
 class MobileTransaction extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false,
-      operator: this.props.operaor || 'Velcom',
       number: '',
       price: '',
       cards: [],
-      choosenCard: ''
+      choosenCard: '',
+      finished: false,
+      stepIndex: 0,
+      loading: false,
+      value: 1
     };
   }
+
+  dummyAsync(cb) {
+    this.setState({loading: true}, () => {
+      this.asyncTimer = setTimeout(cb, 500);
+    });
+  };
+
+  handleNext() {
+    const {stepIndex} = this.state;
+    if (stepIndex == 2) {
+      this.pay();
+    }
+    if (!this.state.loading) {
+      this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex + 1,
+        finished: stepIndex >= 2,
+      }));
+    }
+  };
+
+  handlePrev() {
+    const {stepIndex} = this.state;
+    if (!this.state.loading) {
+      this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex - 1,
+      }));
+    }
+  };
+
+  handleChangeMenu(event, index, value) {
+     this.setState({value});
+   }
+
+   _onRowSelection(card) {
+     if (card && card.length !== 0) {
+        this.setState({ choosenCard : this.state.cards[card["0"]] }, () => {
+          return;
+        });
+      } else if (this.state.stepIndex == 1) {
+        this.setState({ choosenCard : '' }, () => {
+          return;
+        });
+      }
+   }
+
+  getStepContent(stepIndex) {
+    let _this = this;
+    switch (stepIndex) {
+      case 0:
+        return (
+          <div>
+            <p>
+              Select your card for make payment.
+            </p>
+            <Table
+              onRowSelection={this._onRowSelection.bind(this)}
+              selectable={true}>
+                <TableHeader>
+                  <TableRow>
+                    <TableHeaderColumn>Number</TableHeaderColumn>
+                    <TableHeaderColumn>Balance</TableHeaderColumn>
+                    <TableHeaderColumn>Experation date</TableHeaderColumn>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {this.state.cards.map(item => {
+                    return <TableRow key={item._id} selected={(_this.state.choosenCard.number == item.number)}>
+                      <TableRowColumn>{item.number}</TableRowColumn>
+                      <TableRowColumn>{item.balance}</TableRowColumn>
+                      <TableRowColumn>{item.month}/{item.year}</TableRowColumn>
+                    </TableRow>;
+                  })}
+                </TableBody>
+              </Table>
+          </div>
+        );
+      case 1:
+        return (
+          <div>
+            <p>
+              Enter data for your payment. Your need to input your telephone number, price and choose your operator.
+            </p>
+            <TextField
+              value={this.state.choosenCard.number}
+              disabled={true}
+              floatingLabelText="Your choosen card number"
+              hintText={this.state.choosenCard.number} />
+            <br/>
+            <SelectField
+              floatingLabelText="Mobile operator"
+              value={this.state.value}
+              onChange={this.handleChangeMenu.bind(this)}>
+              {operatorList.map(item => {
+                return <MenuItem value={item.value} primaryText={item.name} />;
+              })}
+            </SelectField>
+            <br/>
+            <TextField
+              name="number"
+              value={this.state.number}
+              floatingLabelText="Input phone number"
+              onChange={this.handleChange.bind(this)}/>
+            <br/>
+            <TextField
+              name="price"
+              value={this.state.price}
+              floatingLabelText="Input price"
+              onChange={this.handleChange.bind(this)}/>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <p>
+              Please verify all info that you enter.
+            </p>
+            <TextField
+              value={this.state.choosenCard.number}
+              disabled={true}
+              floatingLabelText="Your choosen card number"
+              hintText={this.state.choosenCard.number} />
+            <br/>
+            <TextField
+              value={operatorList[this.state.value - 1].name}
+              disabled={true}
+              floatingLabelText="Your opetator"
+              hintText={operatorList[this.state.value - 1].name} />
+            <br/>
+            <TextField
+              value={this.state.number}
+              disabled={true}
+              floatingLabelText="Your phone number"
+              hintText={this.state.number} />
+            <br/>
+            <TextField
+              value={this.state.price}
+              disabled={true}
+              floatingLabelText="Your price"
+              hintText={this.state.price} />
+          </div>
+        );
+      default:
+        return 'You\'re a long way from home sonny jim!';
+    }
+  }
+
   componentDidMount() {
     let _this = this;
 		getAll(JSON.parse(localStorage.getItem('user'))._id)
 			.then((response) => {
-        let newOptions = [];
 				_this.setState({ cards: response.cards });
-        response.cards.map(card => {
-          newOptions.push({
-            value: card.number,
-            label: card.number
-          })
-        });
-        _this.setState({ options: newOptions })
 			});
-  }
-
-  setCard(card) {
-    this.setState({ choosenCard: card });
-  }
-
-  openModal() {
-    this.setState({modalIsOpen: true});
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
   }
 
   handleChange(event) {
@@ -65,14 +214,7 @@ class MobileTransaction extends React.Component {
     let _this = this;
     let cardId = 0,
         cardName;
-     this.state.cards.map(card => {
-      if(card.number == _this.state.choosenCard) {
-        cardId = card.id;
-        cardName = card.bankName;
-        return;
-      }
-    })
-    this.props.dispatch(submitContactForm(cardId, getBillForPay(cardName).id, this.state.price));
+    this.props.dispatch(submitMobilePay(this.state.choosenCard._id, this.state.choosenCard.bankName, this.state.price));
   }
 
   logChange(item) {
@@ -80,82 +222,95 @@ class MobileTransaction extends React.Component {
     this.setState({ choosenCard: item.value })
 }
 
-  render() {
-    let _this = this;
+renderContent() {
+  const {finished, stepIndex, choosenCard, number, price} = this.state;
+  const contentStyle = {margin: '0 16px', overflow: 'hidden'};
+
+  let isDisabled = true;
+  switch (stepIndex) {
+    case 0:
+      if (choosenCard) {
+        isDisabled = false;
+      }
+      break;
+    case 1:
+      if (number && price) {
+        isDisabled = false;
+      }
+     break;
+    case 2:
+      isDisabled =false;
+      break;
+  }
+
+  if (finished) {
     return (
-      <div className="container">
-        <div className="panel">
-          <div className="panel-heading">
-            <h3 className="panel-title">Operator Form</h3>
-          </div>
-          <Select
-              name="form-field-name"
-              value="one"
-              options={_this.state.options}
-              onChange={_this.logChange.bind(_this)}
-          />
-        <div>Your choosen card: {_this.state.choosenCard}</div>
-        {/*<div className="dropdown">
-            <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Card number
-            <span className="caret"></span></button>
-            <ul className="dropdown-menu">
-              {
-                this.state.cards.map(card => {
-                  if (card) {
-                    return <li><a>{card.number}</a></li>;
-                  } else {
-                    return;
-                  }
-                })
-              }
-            </ul>
-          </div> */}
-          <div className="panel-body">
-            <Messages messages={this.props.messages}/>
-            <form className="form-horizontal">
-              <div className="form-group">
-                <label htmlFor="name" className="col-sm-2">Phone Number</label>
-                <div className="col-sm-8">
-                  <input type="text" name="number" id="number" className="form-control" value={this.state.number} onChange={this.handleChange.bind(this)} autoFocus/>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="email" className="col-sm-2">Price</label>
-                <div className="col-sm-8">
-                  <input type="price" name="price" id="price" className="form-control" value={this.state.price} onChange={this.handleChange.bind(this)}/>
-                </div>
-              </div>
-            </form>
-            <button onClick={_this.openModal.bind(_this)} className="btn btn-success">Send</button>
-          </div>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <div style={contentStyle}>
+          <p>
+            <a
+              href="#"
+              onClick={(event) => {
+                event.preventDefault();
+                this.setState({stepIndex: 0, finished: false});
+              }}
+            >
+              Click here
+            </a> to make a new pay.
+          </p>
         </div>
-        <div>
-        <Modal
-          isOpen={_this.state.modalIsOpen}
-          onAfterOpen={_this.afterOpenModal}
-          onRequestClose={_this.closeModal.bind(_this)}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-        <div className='panel panel-default'>
-          <div className='panel-heading'>Operator: {_this.state.operator}</div>
-          <div className='panel-heading'>Card number: {_this.state.choosenCard}</div>
-          <div className='panel-heading'>Phone number: {_this.state.number}</div>
-          <div className='panel-heading'>Price: {_this.state.price}</div>
-        </div>
-        <div className="btn-toolbar" role="toolbar">
-          <div className="btn-group" role="group">
-            <button type="button" className='btn btn-primary' onClick={_this.closeModal.bind(_this)}>close</button>
-          </div>
-          <div className="btn-group" role="toolbar">
-            <button type="button" className='btn btn-primary' onClick={_this.pay.bind(_this)}>Pay</button>
-          </div>
-        </div>
-        </Modal>
-      </div>
-      </div>
+      </MuiThemeProvider>
     );
   }
+
+
+  return (
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <div style={contentStyle}>
+        <div>{this.getStepContent(stepIndex)}</div>
+        <div style={{marginTop: 24, marginBottom: 12}}>
+          <FlatButton
+            label="Back"
+            disabled={stepIndex === 0}
+            onTouchTap={this.handlePrev.bind(this)}
+            style={{marginRight: 12}}
+          />
+          <RaisedButton
+            label={stepIndex === 2 ? 'Finish' : 'Next'}
+            primary={true}
+            disabled={isDisabled}
+            onTouchTap={this.handleNext.bind(this)}
+          />
+        </div>
+      </div>
+    </MuiThemeProvider>
+  );
+}
+
+render() {
+  const {loading, stepIndex} = this.state;
+
+  return (
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
+        <Stepper activeStep={stepIndex}>
+          <Step>
+            <StepLabel>Choose card for pay</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Enter pay info</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Verify your pay info</StepLabel>
+          </Step>
+        </Stepper>
+        <ExpandTransition loading={loading} open={true}>
+          {this.renderContent()}
+        </ExpandTransition>
+      </div>
+    </MuiThemeProvider>
+  );
+}
 }
 
 const mapStateToProps = (state) => {
