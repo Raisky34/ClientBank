@@ -259,6 +259,7 @@ renderContent() {
             </a> to make a new pay.
           </p>
         </div>
+<<<<<<< HEAD
       </MuiThemeProvider>
     );
   }
@@ -281,6 +282,15 @@ renderContent() {
             disabled={isDisabled}
             onTouchTap={this.handleNext.bind(this)}
           />
+=======
+        <div className="btn-toolbar" role="toolbar">
+					<div className="btn-group" role="toolbar">
+						<button type="button" className='btn btn-primary' onClick={_this.pay.bind(_this)}>Pay</button>
+					</div>
+          <div className="btn-group" role="group">
+            <button type="button" className='btn btn-primary' onClick={_this.closeModal.bind(_this)}>Close</button>
+          </div>
+>>>>>>> master
         </div>
       </div>
     </MuiThemeProvider>
