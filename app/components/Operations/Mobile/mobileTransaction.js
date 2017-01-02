@@ -47,7 +47,9 @@ class MobileTransaction extends React.Component {
       finished: false,
       stepIndex: 0,
       loading: false,
-      value: 1
+      value: 1,
+      numberTextError: '',
+      priceTextError: ''
     };
   }
 
@@ -153,12 +155,14 @@ class MobileTransaction extends React.Component {
               name="number"
               value={this.state.number}
               floatingLabelText="Input phone number"
+              errorText= {this.state.numberTextError}
               onChange={this.handleChange.bind(this)}/>
             <br/>
             <TextField
               name="price"
               value={this.state.price}
               floatingLabelText="Input price"
+              errorText= {this.state.priceTextError}
               onChange={this.handleChange.bind(this)}/>
           </div>
         );
@@ -207,6 +211,22 @@ class MobileTransaction extends React.Component {
   }
 
   handleChange(event) {
+    switch(event.target.name) {
+      case 'number':
+        if (event.target.value.match(/^([+]?[0-9\s-\(\)]{11,25})*$/i)) {
+          this.setState({ numberTextError: '' })
+        } else {
+          this.setState({ numberTextError: 'Invalid phone number. Example +375291234567.' })
+        }
+        break;
+      case 'price':
+        if (parseFloat(event.target.value) >= 0) {
+          this.setState({ priceTextError: '' })
+        } else {
+          this.setState({ priceTextError: 'Price should be positive.' })
+        }
+        break;
+    }
     this.setState({ [event.target.name]: event.target.value });
   }
 
@@ -223,7 +243,7 @@ class MobileTransaction extends React.Component {
 }
 
 renderContent() {
-  const {finished, stepIndex, choosenCard, number, price} = this.state;
+  const {finished, stepIndex, choosenCard, number, price, priceTextError, numberTextError} = this.state;
   const contentStyle = {margin: '0 16px', overflow: 'hidden'};
 
   let isDisabled = true;
@@ -234,7 +254,7 @@ renderContent() {
       }
       break;
     case 1:
-      if (number && price) {
+      if (number && price && priceTextError == '' && numberTextError == '') {
         isDisabled = false;
       }
      break;
@@ -259,7 +279,6 @@ renderContent() {
             </a> to make a new pay.
           </p>
         </div>
-<<<<<<< HEAD
       </MuiThemeProvider>
     );
   }
@@ -282,15 +301,6 @@ renderContent() {
             disabled={isDisabled}
             onTouchTap={this.handleNext.bind(this)}
           />
-=======
-        <div className="btn-toolbar" role="toolbar">
-					<div className="btn-group" role="toolbar">
-						<button type="button" className='btn btn-primary' onClick={_this.pay.bind(_this)}>Pay</button>
-					</div>
-          <div className="btn-group" role="group">
-            <button type="button" className='btn btn-primary' onClick={_this.closeModal.bind(_this)}>Close</button>
-          </div>
->>>>>>> master
         </div>
       </div>
     </MuiThemeProvider>

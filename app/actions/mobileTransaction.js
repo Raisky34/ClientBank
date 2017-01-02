@@ -8,11 +8,7 @@ export function submitMobilePay(billFrom, bankName, price) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         billFrom: billFrom,
-<<<<<<< HEAD
-        bankName: bankName,
-=======
 				bankName: bankName,
->>>>>>> master
         price: price
       })
     }).then((response) => {
