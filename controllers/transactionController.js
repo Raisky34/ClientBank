@@ -13,7 +13,7 @@ var Bill = require('../models/Bill');
 /**
  * POST /transaction
  */
-exports.transactionPost = function(req, res, next) {
+exports.paymentPost = function(req, res, next) {
   var errors = req.validationErrors();
 
   if (errors) {
@@ -21,32 +21,34 @@ exports.transactionPost = function(req, res, next) {
   }
 
 	Card.findOne({ _id: req.body.billFrom }, function(err, card) {
-			if (!card) {
-				return res.status(400).send({ msg: "Can't find choosen card in system" });
-    	}
-
-			if (Number(card.balance) >= Number(req.body.price)) {
-				card.balance =  Number(card.balance) - Number(req.body.price);
-      	card.save(function(err) {});
-    	} else {
-				return res.status(400).send({ msg: "You don't have enough money." });
-  	}
+		if (!card) {
+			return res.status(400).send({ msg: "Can't find choosen card in system" });
+    }
 
 		Bill.findOne({ bankName: req.body.bankName }, function(err, bill) {
 			if (!bill) {
 				return res.status(400).send({ msg: "Can't find bank bill in system" });
 			}
+
+			if (Number(card.balance) >= Number(req.body.price)) {
+				card.balance =  Number(card.balance) - Number(req.body.price);
+				card.save(function(err) {});
+			} else {
+				return res.status(400).send({ msg: "You don't have enough money." });
+			}
+
 			bill.balance =  Number(req.body.price) + Number(bill.balance);
 			bill.save(function(err) {});
 
 			let transactions = new Transactions({
-				billFrom: req.body.billFrom,
-				billTo: bill.id,
+				billFrom: card.number,
+				billTo: bill.number,
+				payInfo: req.body.payInfo,
 				price: req.body.price
 			});
 			transactions.save(function(err) {
-				res.send({ transactions: transactions });
-				//res.send({ msg: "Operation successfully." });
+				//res.send({ transactions: transactions });
+				res.send({ msg: "Payment successfully." });
 			});
   	});
 	});

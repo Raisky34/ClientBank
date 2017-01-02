@@ -12,6 +12,7 @@ var schemaOptions = {
 var transactionsSchema = new mongoose.Schema({
   billFrom: String,
   billTo: String,
+	payInfo: String,
   price: String
 }, schemaOptions);
 

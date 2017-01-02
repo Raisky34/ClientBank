@@ -99,7 +99,7 @@ app.post('/contact', contactController.contactPost);
 
 app.post('/card/addExisting', cardController.cardPost);
 app.post('/card/getAll', cardController.getAll);
-app.post('/transfer', transactionController.transactionPost);
+app.post('/payment', transactionController.paymentPost);
 app.post('/transfers/getAll', transactionController.getAll);
 app.post('/mobileTransaction', mobileController.contactPost);
 app.post('/findBill', billController.getBillInfo);
