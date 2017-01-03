@@ -31,3 +31,36 @@ export function submitPayment(billFrom, bankName, payInfo, price) {
     });
   };
 }
+
+export function submitTransferCardToCard(billFrom, billTo, moneyCount) {
+  return (dispatch) => {
+    dispatch({
+      type: 'CLEAR_MESSAGES'
+    });
+    return fetch('/transfer', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        billFrom: billFrom,
+				billTo: billTo,
+        moneyCount: moneyCount
+      })
+    }).then((response) => {
+      if (response.ok) {
+        return response.json().then((json) => {
+          dispatch({
+            type: 'TRANSFER_SUCCESS',
+            messages: [json]
+          });
+        });
+      } else {
+        return response.json().then((json) => {
+          dispatch({
+            type: 'TRANSFER_FAILURE',
+            messages: Array.isArray(json) ? json : [json]
+          });
+        });
+      }
+    });
+  };
+}

@@ -100,6 +100,7 @@ app.post('/contact', contactController.contactPost);
 app.post('/card/addExisting', cardController.cardPost);
 app.post('/card/getAll', cardController.getAll);
 app.post('/payment', transactionController.paymentPost);
+app.post('/transfer', transactionController.transferPost);
 app.post('/transfers/getAll', transactionController.getAll);
 app.post('/mobileTransaction', mobileController.contactPost);
 app.post('/findBill', billController.getBillInfo);
