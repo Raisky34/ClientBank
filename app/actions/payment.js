@@ -32,7 +32,7 @@ export function submitPayment(billFrom, bankName, payInfo, price) {
   };
 }
 
-export function submitTransferCardToCard(billFrom, billTo, moneyCount) {
+export function submitTransferCardToCard(cardFrom, cardTo, moneyCount) {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -41,8 +41,8 @@ export function submitTransferCardToCard(billFrom, billTo, moneyCount) {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        billFrom: billFrom,
-				billTo: billTo,
+        cardFrom: cardFrom,
+				cardTo: cardTo,
         moneyCount: moneyCount
       })
     }).then((response) => {

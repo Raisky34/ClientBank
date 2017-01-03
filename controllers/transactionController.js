@@ -61,12 +61,12 @@ exports.transferPost = function(req, res, next) {
     return res.status(400).send(errors);
   }
 
-	Card.findOne({ _id: req.body.billFrom }, function(err, cardFrom) {
+	Card.findOne({ _id: req.body.cardFrom }, function(err, cardFrom) {
 		if (!cardFrom) {
 			return res.status(400).send({ msg: "Can't find card in system which is money source." });
     }
 
-		Card.findOne({ _id: req.body.billTo }, function(err, cardTo) {
+		Card.findOne({ number: req.body.cardTo }, function(err, cardTo) {
 			if (!cardTo) {
 				return res.status(400).send({ msg: "Can't find card in system to transfer money." });
 	    }
