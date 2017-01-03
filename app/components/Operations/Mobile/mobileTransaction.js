@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { submitMobilePay } from '../../../actions/mobileTransaction';
+import { submitPayment } from '../../../actions/payment';
 import Messages from '../../Messages';
 import { getAll } from '../../../actions/card';
 
@@ -223,7 +223,7 @@ class MobileTransaction extends React.Component {
         if (parseFloat(event.target.value) >= 0) {
           this.setState({ priceTextError: '' })
         } else {
-          this.setState({ priceTextError: 'Price should be positive.' })
+          this.setState({ priceTextError: 'Price should be number and positive.' })
         }
         break;
     }
@@ -231,10 +231,8 @@ class MobileTransaction extends React.Component {
   }
 
   pay() {
-    let _this = this;
-    let cardId = 0,
-        cardName;
-    this.props.dispatch(submitMobilePay(this.state.choosenCard._id, this.state.choosenCard.bankName, this.state.price));
+		var payInfo = "Mobile telephone payment. Operator: " + operatorList[this.state.value - 1].name;
+    this.props.dispatch(submitPayment(this.state.choosenCard._id, this.state.choosenCard.bankName, payInfo, this.state.price));
   }
 
   logChange(item) {
@@ -267,6 +265,7 @@ renderContent() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div style={contentStyle}>
+					<Messages messages={this.props.messages}/>
           <p>
             <a
               href="#"
