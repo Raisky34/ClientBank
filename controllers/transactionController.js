@@ -71,14 +71,14 @@ exports.transferPost = function(req, res, next) {
 				return res.status(400).send({ msg: "Can't find card in system to transfer money." });
 	    }
 
-			if (Number(cardFrom.balance) >= Number(req.body.price)) {
-				cardFrom.balance =  Number(cardFrom.balance) - Number(req.body.price);
+			if (Number(cardFrom.balance) >= Number(req.body.moneyCount)) {
+				cardFrom.balance =  Number(cardFrom.balance) - Number(req.body.moneyCount);
 				cardFrom.save(function(err) {});
 			} else {
 				return res.status(400).send({ msg: "You don't have enough money." });
 			}
 
-			cardTo.balance =  Number(req.body.price) + Number(cardTo.balance);
+			cardTo.balance =  Number(req.body.moneyCount) + Number(cardTo.balance);
 			cardTo.save(function(err) {});
 
 			var payInfo = "Tranfer money from card to card";
@@ -87,7 +87,7 @@ exports.transferPost = function(req, res, next) {
 				billFrom: cardFrom.number,
 				billTo: cardTo.number,
 				payInfo: payInfo,
-				price: req.body.price
+				price: req.body.moneyCount
 			});
 			transactions.save(function(err) {
 				res.send({ msg: "Transfer successfully." });
