@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Messages from './Messages';
-import { addExisting, getAll } from '../actions/card';
+import { addExisting, getAllUserCards } from '../actions/card';
 import Product from './Operations/Products/Product';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -41,7 +41,7 @@ class Products extends React.Component {
   }
 	componentDidMount() {
 		let _this = this;
-		getAll(JSON.parse(localStorage.getItem('user'))._id)
+		getAllUserCards(JSON.parse(localStorage.getItem('user'))._id)
 			.then((response) => {
 				_this.setState({ cards: response.cards });
 			});

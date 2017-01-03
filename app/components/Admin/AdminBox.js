@@ -1,10 +1,35 @@
 import React from 'react';
 import RoleAwareComponent from '../Account/RoleAwareComponent';
-import { List } from 'react-virtualized';
 import { getAllUsers } from '../../actions/admin';
+import { getAllUserCards } from '../../actions/card';
+
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import Avatar from 'material-ui/Avatar';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import Person from 'material-ui/svg-icons/social/person';
+import CreditCard from 'material-ui/svg-icons/action/credit-card';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
-	const list = [];
+const iconButtonElement = (
+  <IconButton
+    touch={true}
+    tooltip="more"
+    tooltipPosition="bottom-left"
+  >
+    <MoreVertIcon color={grey400} />
+  </IconButton>
+);
 
 class AdminBox extends RoleAwareComponent {
   constructor(props) {
@@ -13,9 +38,24 @@ class AdminBox extends RoleAwareComponent {
     // component will be visible for the roles below:
     this.authorize = ['admin'];
 		this.state = {
-			users: []
+			users: [],
+			selectedUser: '',
+			selectedUserCards: [],
+			open: false
 		}
   }
+
+	handleMenuItemClick(user, event){
+		this.setState({open: true, selectedUser: user});
+		getAllUserCards(user._id)
+			.then((response) => {
+				this.setState({ selectedUserCards: response.cards });
+			});
+	}
+
+	handleClose() {
+		this.setState({open: false});
+	};
 
 	componentDidMount() {
 		getAllUsers()
@@ -24,55 +64,106 @@ class AdminBox extends RoleAwareComponent {
 		});
 	}
 
-  render() {
-    const jsx = (
-      <div className="pure-u-13-24 box photo-box">
-        <div className="box-wrapper">
-					<h2>List of all users</h2>
-	 					{
-	 						this.state.users.map(user => {
-	 							if (user) {
-	 								return <div>
-										<ul className="list-group">
-									    <li className="list-group-item">User id: {user._id}</li>
-									    <li className="list-group-item">User name: {user.name}</li>
-									    <li className="list-group-item">User email: {user.email}</li>
-									  </ul>
-	 								</div>;
-	 							} else {
-	 								return;
-	 							}
+	getRightIconMenu(user){
+		return (
+			<IconMenu iconButtonElement={iconButtonElement} >
+				<MenuItem onTouchTap={this.handleMenuItemClick.bind(this, user)}>Info</MenuItem>
+			</IconMenu>
+		)
+	}
 
-	 						})
-	 					}
-						<List
-							className="List"
-							width={300}
-	    				height={300}
-	    				rowCount={list.length}
-	    				rowHeight={20}
-	    				rowRenderer={this.rowRenderer}
-	   				/>
-        </div>
-      </div>
+  render() {
+		const actions = [
+      <FlatButton
+        label="Close"
+        primary={true}
+				keyboardFocused={true}
+        onTouchTap={this.handleClose.bind(this)}
+      />,
+    ];
+
+    const jsx = (
+			<MuiThemeProvider muiTheme={getMuiTheme()}>
+		  	<div>
+					<Dialog
+								title="Client info"
+								actions={actions}
+								modal={false}
+								open={this.state.open}
+								autoScrollBodyContent={true}
+								onRequestClose={this.handleClose}
+							>
+							<TextField
+								defaultValue={this.state.selectedUser.name}
+								disabled={true}
+	              floatingLabelText="Client name"
+	              hintText={this.state.selectedUser.name}/>
+							&nbsp;
+							<TextField
+								defaultValue={this.state.selectedUser.email }
+								disabled={true}
+	              floatingLabelText="Client email"
+	              hintText={this.state.selectedUser.email}/>
+							<br/>
+							<TextField
+								defaultValue={this.state.selectedUser.gender ? this.state.selectedUser.gender : "Didn't decide" }
+								disabled={true}
+	              floatingLabelText="Client gender"
+	              hintText={this.state.selectedUser.gender ? this.state.selectedUser.gender : "Didn't decide"}/>
+							&ensp;
+							<TextField
+								defaultValue={this.state.selectedUser.location ? this.state.selectedUser.location : "Didn't decide"}
+								disabled={true}
+	              floatingLabelText="Client location"
+	              hintText={this.state.selectedUser.location ? this.state.selectedUser.location : "Didn't decide"}/>
+							<br/>
+								<List>
+	            		<Subheader>Client cards</Subheader>
+									{
+										this.state.selectedUserCards.map(card => {
+											return <ListItem
+																leftAvatar={ <Avatar icon={<CreditCard />} /> }
+																primaryText={card.number}
+																secondaryText={
+																	<p>
+																		<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
+																	</p>
+																}
+														 />
+										})
+									}
+								</List>
+							<br/>
+					</Dialog>
+	      	<List>
+	        	<Subheader>Users</Subheader>
+						{
+							this.state.users.map(user => {
+								if(user.role === "admin") return;
+								return <div>
+									<ListItem
+										onTouchTap={this.handleMenuItemClick.bind(this, user)}
+										leftAvatar={ <Avatar icon={<Person />} /> }
+			          		rightIconButton={this.getRightIconMenu(user)}
+			          		primaryText={user.name}
+			          		secondaryText={
+			          			<p>
+			          				<span style={{color: darkBlack}}>{user.email}</span><br />
+			          			</p>
+			          		}
+			          		secondaryTextLines={1}
+			        		/>
+			        		<Divider inset={true} />
+								</div>
+							})
+						}
+	      	</List>
+		  	</div>
+			</MuiThemeProvider>
     );
 
     return jsx;
   }
-
-	rowRenderer ({
-		key,         // Unique key within array of rows
-		index,       // Index of row within collection
-		isScrolling, // The List is currently being scrolled
-		isVisible,   // This row is visible within the List (eg it is not an overscanned row)
-		style        // Style object to be applied to row (to position it)
-	}) {
-		return (
-			<div key={key} style={style}>
-				{list[index]}
-			</div>
-		)
-	}
 }
 
 export default AdminBox;

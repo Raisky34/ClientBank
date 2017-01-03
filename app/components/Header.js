@@ -37,8 +37,7 @@ class Header extends React.Component {
 			if(this.props.user.role === 'admin'){
 				leftNav = (
 					<ul className="nav navbar-nav">
-						<li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
-						<li><Link to="/adminbox" activeStyle={active}>Clients info</Link></li>
+						<li><IndexLink to="/adminbox" activeStyle={active}>Clients info</IndexLink></li>
 						<li><Link to="/admincard" activeStyle={active}>Add card</Link></li>
 						<li><Link to="/adminbill" activeStyle={active}>Add bank bill</Link></li>
 					</ul>

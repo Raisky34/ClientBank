@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { submitPayment } from '../../../actions/payment';
 import Messages from '../../Messages';
-import { getAll } from '../../../actions/card';
+import { getAllUserCards } from '../../../actions/card';
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -204,7 +204,7 @@ class MobileTransaction extends React.Component {
 
   componentDidMount() {
     let _this = this;
-		getAll(JSON.parse(localStorage.getItem('user'))._id)
+		getAllUserCards(JSON.parse(localStorage.getItem('user'))._id)
 			.then((response) => {
 				_this.setState({ cards: response.cards });
 			});

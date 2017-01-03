@@ -38,10 +38,10 @@ export default function getRoutes(store) {
     <Route path="/" component={App}>
       <IndexRoute authorize={['user', 'admin']} component={Home} onLeave={clearMessages}/>
       <Route path="/contact" component={Contact} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
-      <Route authorize={['admin']} component={Admin} onLeave={clearMessages}>
-        <Route component={AdminBox} path="/adminbox" />
-				<Route component={AdminCard} path="/admincard" />
-				<Route component={AdminBill} path="/adminbill" />
+      <Route authorize={['admin']} component={Admin}>
+        <Route component={AdminBox} path="/adminbox" onLeave={clearMessages}/>
+				<Route component={AdminCard} path="/admincard" onLeave={clearMessages} />
+				<Route component={AdminBill} path="/adminbill"onLeave={clearMessages} />
       </Route>
       <Route path="/login" component={Login} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
       <Route path="/signup" component={Signup} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
