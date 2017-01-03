@@ -54,6 +54,48 @@ exports.paymentPost = function(req, res, next) {
 	});
 };
 
+exports.transferPost = function(req, res, next) {
+  var errors = req.validationErrors();
+
+  if (errors) {
+    return res.status(400).send(errors);
+  }
+
+	Card.findOne({ _id: req.body.cardFrom }, function(err, cardFrom) {
+		if (!cardFrom) {
+			return res.status(400).send({ msg: "Can't find card in system which is money source." });
+    }
+
+		Card.findOne({ number: req.body.cardTo }, function(err, cardTo) {
+			if (!cardTo) {
+				return res.status(400).send({ msg: "Can't find card in system to transfer money." });
+	    }
+
+			if (Number(cardFrom.balance) >= Number(req.body.moneyCount)) {
+				cardFrom.balance =  Number(cardFrom.balance) - Number(req.body.moneyCount);
+				cardFrom.save(function(err) {});
+			} else {
+				return res.status(400).send({ msg: "You don't have enough money." });
+			}
+
+			cardTo.balance =  Number(req.body.moneyCount) + Number(cardTo.balance);
+			cardTo.save(function(err) {});
+
+			var payInfo = "Tranfer money from card to card";
+
+			let transactions = new Transactions({
+				billFrom: cardFrom.number,
+				billTo: cardTo.number,
+				payInfo: payInfo,
+				price: req.body.moneyCount
+			});
+			transactions.save(function(err) {
+				res.send({ msg: "Transfer successfully." });
+			});
+		});
+	});
+};
+
 exports.getAll = function(req, res, next) {
   let transferArray = [];
   let asyncArray = [];

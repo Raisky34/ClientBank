@@ -8,6 +8,7 @@ export default function messages(state = {}, action) {
     case 'RESET_PASSWORD_FAILURE':
     case 'CONTACT_FORM_FAILURE':
     case 'PAYMENT_FAILURE':
+		case 'TRANSFER_FAILURE':
     case 'OAUTH_FAILURE':
     case 'UNLINK_FAILURE':
     case 'LINK_FAILURE':
@@ -21,6 +22,7 @@ export default function messages(state = {}, action) {
     case 'RESET_PASSWORD_SUCCESS':
     case 'CONTACT_FORM_SUCCESS':
     case 'PAYMENT_SUCCESS':
+		case 'TRANSFER_SUCCESS':
 		case 'ADD_CARD_SUCCESS':
 		case 'CARD_SUCCESS':
       return {
