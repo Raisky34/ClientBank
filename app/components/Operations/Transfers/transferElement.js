@@ -168,7 +168,7 @@ class MobileTransaction extends React.Component {
           </div>
         );
       default:
-        return 'You\'re a long way from home sonny jim!';
+        return 'You\'re a long way from home sonny!';
     }
   }
 
@@ -201,8 +201,7 @@ class MobileTransaction extends React.Component {
   }
 
   pay() {
-		var payInfo = "Transfer crad payment. Destination card: " + this.state.number;
-    this.props.dispatch(submitTransferCardToCard(this.state.choosenCard._id, this.state.number, payInfo, this.state.price));
+    this.props.dispatch(submitTransferCardToCard(this.state.choosenCard._id, this.state.number, this.state.price));
   }
 
   logChange(item) {

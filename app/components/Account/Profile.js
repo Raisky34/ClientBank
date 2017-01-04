@@ -90,12 +90,6 @@ class Profile extends React.Component {
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-sm-3">Gravatar</label>
-                <div className="col-sm-4">
-                  <img src={this.state.gravatar} width="100" height="100" className="profile"/>
-                </div>
-              </div>
-              <div className="form-group">
                 <div className="col-sm-offset-3 col-sm-4">
                   <button type="submit" className="btn btn-success">Update Profile</button>
                 </div>
@@ -125,17 +119,6 @@ class Profile extends React.Component {
                 </div>
               </div>
             </form>
-          </div>
-        </div>
-        <div className="panel">
-          <div className="panel-body">
-            <div className="form-horizontal">
-              <legend>Linked Accounts</legend>
-              <div className="form-group">
-                <div className="col-sm-offset-3 col-sm-4">
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div className="panel">
