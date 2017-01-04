@@ -9,9 +9,7 @@ class TransferList extends React.Component {
 				<div className="panel">
 					<div className="panel-body">
 						<h3>Transfers</h3>
-						<p>Balance: 754 BR</p>
-						<p>USD: 234 $</p>
-						<p>EUR: 215 EUR</p>
+						<p>Transfer your money from one card to another</p>
 						<a href="/operations/transfers" role="button" className="btn btn-default">More</a>
 					</div>
 				</div>

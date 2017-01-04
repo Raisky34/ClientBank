@@ -8,7 +8,7 @@ class MobileOperations extends React.Component {
 			<div className="col-sm-6">
 				<div className="panel">
 					<div className="panel-body">
-						<h3>Mobile connection</h3>
+						<h3>Mobile payments</h3>
 
 						<Operator title="Velcom"/>
 						<Operator title="MTS"/>
