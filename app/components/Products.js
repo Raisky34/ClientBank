@@ -27,11 +27,53 @@ class Products extends React.Component {
 			month: '',
 			year: '',
 			cards: [],
-			open: false
+			open: false,
+      numberTextError: '',
+      cvcTextError: '',
+      monthTextError: '',
+      yearTextError: '',
+      fullNameTextError: ''
 		 };
   }
 
   handleChange(event) {
+    switch(event.target.name) {
+      case 'number':
+        if (parseFloat(event.target.value) >= 0 && event.target.value.length == 16) {
+          this.setState({ numberTextError: '' })
+        } else {
+          this.setState({ numberTextError: 'Invalid card number. Example 1234 5678 9012 3456.' })
+        }
+        break;
+      case 'fullName':
+        if (event.target.value.length > 0 && (event.target.value.match(/^[A-z]+/))) {
+          this.setState({ fullNameTextError: '' })
+        } else {
+          this.setState({ fullNameTextError: 'Should be not empty and should be text.' })
+        }
+        break;
+      case 'cvc':
+        if (parseFloat(event.target.value) >= 0 && event.target.value.lenght == 3) {
+          this.setState({ cvcTextError: '' })
+        } else {
+          this.setState({ cvcTextError: 'Cvc should be 3 number. Example 123.' })
+        }
+        break;
+      case 'month':
+        if (parseFloat(event.target.value) >= 1 && parseFloat(event.target.value) <= 12) {
+          this.setState({ monthTextError: '' })
+        } else {
+          this.setState({ monthTextError: 'Month should be number 1 to 12. Example 6 or 06.' })
+        }
+        break;
+      case 'year':
+        if (parseFloat(event.target.value) >= 2017 && parseFloat(event.target.value) <= 2045) {
+          this.setState({ yearTextError: '' })
+        } else {
+          this.setState({ yearTextError: 'Year should be number at 2017 or bigger. Example 2022.' })
+        }
+        break;
+    }
     this.setState({ [event.target.name]: event.target.value });
   }
 
@@ -56,8 +98,11 @@ class Products extends React.Component {
   };
 
 	render() {
-		const {number, cvc, fullName, month, year} = this.state;
-		let isDisabled = !(number && cvc && fullName && month && year);
+		const {number, cvc, fullName, month, year,
+      numberTextError, cvcTextError, monthTextError, yearTextError, fullNameTextError} = this.state;
+		let isDisabled = !(number && cvc && fullName && month && year
+      && !numberTextError && !cvcTextError && !monthTextError
+      && !yearTextError && !fullNameTextError);
 		const actions = [
       <FlatButton
         label="Cancel"
@@ -93,6 +138,7 @@ class Products extends React.Component {
 							value={this.state.number}
 							style={style}
 							floatingLabelText="Card number"
+              errorText= {this.state.numberTextError}
 							onChange={this.handleChange.bind(this)}/>
 						&nbsp;
 						<TextField
@@ -100,6 +146,7 @@ class Products extends React.Component {
 							value={this.state.fullName}
 							style={style}
 							floatingLabelText="Full name"
+              errorText= {this.state.fullNameTextError}
 							onChange={this.handleChange.bind(this)}/>
 						<br/>
 						<TextField
@@ -107,6 +154,7 @@ class Products extends React.Component {
 							value={this.state.cvc}
 							style={style}
 							floatingLabelText="CVC"
+              errorText= {this.state.cvcTextError}
 							onChange={this.handleChange.bind(this)}/>
 						&ensp;
 						<TextField
@@ -114,6 +162,7 @@ class Products extends React.Component {
 							value={this.state.month}
 							style={style}
 							floatingLabelText="Month"
+              errorText= {this.state.monthTextError}
 							onChange={this.handleChange.bind(this)}/>
 						<br/>
 						<TextField
@@ -121,6 +170,7 @@ class Products extends React.Component {
 							value={this.state.year}
 							style={style}
 							floatingLabelText="Year"
+              errorText= {this.state.yearTextError}
 							onChange={this.handleChange.bind(this)}/>
 						<br/>
 		    </Dialog>
