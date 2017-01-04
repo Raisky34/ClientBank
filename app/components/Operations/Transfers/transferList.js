@@ -12,7 +12,7 @@ class TransferList extends React.Component {
 						<p>Balance: 754 BR</p>
 						<p>USD: 234 $</p>
 						<p>EUR: 215 EUR</p>
-						<a href="#" role="button" className="btn btn-default">More</a>
+						<a href="/operations/transfers" role="button" className="btn btn-default">More</a>
 					</div>
 				</div>
 			</div>
