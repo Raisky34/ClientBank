@@ -1,9 +1,6 @@
 const initialState = {
   users: {},
-	isReceived: false,
-	balance: 0,
-	card: {},
-	bill: {}
+	isReceived: false
 };
 
 export default function admin(state = initialState, action) {
@@ -19,25 +16,6 @@ export default function admin(state = initialState, action) {
 							...state,
 							isReceived: false
 			      };
-				case 'ADD_CARD_SUCCESS':
-						return {
-							...state,
-							balance: action.balance,
-        			card: action.card
-						};
-				case 'ADD_CARD_FAIL':
-						return {
-							...state
-						};
-				case 'CREATE_BILL_SUCCESS':
-						return {
-							...state,
-        			bill: action.bill
-						};
-				case 'CREATE_BILL_FAIL':
-						return {
-							...state
-						};
         default:
             return state;
     }

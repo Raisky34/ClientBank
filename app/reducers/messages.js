@@ -12,8 +12,9 @@ export default function messages(state = {}, action) {
     case 'OAUTH_FAILURE':
     case 'UNLINK_FAILURE':
     case 'LINK_FAILURE':
-		case 'ADD_CARD_FAIL':
-		case 'NO_CARD_SUCCESS':
+		case 'CREATE_CARD_FAIL':
+		case 'CREATE_BILL_FAIL':
+		case 'ADD_CARD_FAILURE':
       return {
         error: action.messages
       };
@@ -23,8 +24,9 @@ export default function messages(state = {}, action) {
     case 'CONTACT_FORM_SUCCESS':
     case 'PAYMENT_SUCCESS':
 		case 'TRANSFER_SUCCESS':
+		case 'CREATE_CARD_SUCCESS':
+		case 'CREATE_BILL_SUCCESS':
 		case 'ADD_CARD_SUCCESS':
-		case 'CARD_SUCCESS':
       return {
         success: action.messages
       };

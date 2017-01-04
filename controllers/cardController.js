@@ -18,12 +18,12 @@ exports.cardDelete = function(req, res, next) {
 };
 
 exports.getInfo = function(req, res, next) {
-  Card.get({ _id: req.card.id }, function(err) {
-    res.send({ card: 'Your card has been permanently deleted.' });
+  Card.get({ _id: req.card.id }, function(err, card) {
+    res.send({ card: card });
   });
 };
 
-exports.getAll = function(req, res, next) {
+exports.getAllUserCards = function(req, res, next) {
   var cardsArray = [];
   var asyncArray = [];
   async.waterfall([
@@ -60,7 +60,7 @@ exports.newCardPost = function(req, res, next) {
   Card.findOne({ number: req.body.number }, function(err, card) {
       if (card) {
         isNewCard = false;
-        return res.status(400).send({ msg: 'The card number you have entered is already associated with another account.' });
+        return res.status(400).send({ msg: 'The card number you have entered is already exists in system.' });
       }
       card = new Card({
         number: req.body.number,
@@ -73,7 +73,7 @@ exports.newCardPost = function(req, res, next) {
       });
 
       card.save(function(err) {
-        res.send({ card: card });
+        res.send({ msg: "Add client card in system successfully." });
       });
     });
 };

@@ -13,6 +13,21 @@ export function getAllUsers() {
     });
 }
 
+export function getAllBills() {
+    return fetch('/allBills', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+    }).then((response) => {
+        if (response.ok) {
+            return response.json().then((json) => {
+                return json;
+            });
+        } else {
+            return [];
+        }
+    });
+}
+
 export function addNewCard(number, fullName, bankName, cvc, month, year) {
   return (dispatch) => {
     dispatch({
@@ -33,15 +48,14 @@ export function addNewCard(number, fullName, bankName, cvc, month, year) {
       if (response.ok) {
         return response.json().then((json) => {
           dispatch({
-            type: 'ADD_CARD_SUCCESS',
-            balance: json.card.balance,
-            card: json.card
+            type: 'CREATE_CARD_SUCCESS',
+            messages: [json]
           });
         });
       } else {
         return response.json().then((json) => {
           dispatch({
-            type: 'ADD_CARD_FAIL',
+            type: 'CREATE_CARD_FAIL',
             messages: Array.isArray(json) ? json : [json]
           });
         });
@@ -67,7 +81,7 @@ export function addBankBill(number, bankName) {
         return response.json().then((json) => {
           dispatch({
             type: 'CREATE_BILL_SUCCESS',
-            bill: json.bill
+						messages: [json]
           });
         });
       } else {
