@@ -107,12 +107,10 @@ class AdminCard extends RoleAwareComponent {
 		const {number, value, fullname, cvc, month, year, numberTextError, bankNameTextError, fullnameTextError, cvcTextError, monthTextError, yearTextError} = this.state;
 		let isDisabled = true;
 
-		if (number && value && fullname && cvc && month && year &&
+		if (number && (value >= 0) && fullname && cvc && month && year &&
 			 numberTextError == '' && bankNameTextError == '' && fullnameTextError == '' && cvcTextError == '' && monthTextError == '' && yearTextError == '') {
 			isDisabled = false;
 		}
-
-		const empty = value >= 0;
 
     const jsx = (
 			<MuiThemeProvider muiTheme={getMuiTheme()}>
