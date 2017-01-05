@@ -53,7 +53,7 @@ class Products extends React.Component {
         }
         break;
       case 'cvc':
-        if (parseFloat(event.target.value) >= 0 && event.target.value.lenght == 3) {
+        if (parseFloat(event.target.value) >= 0 && event.target.value.length == 3) {
           this.setState({ cvcTextError: '' })
         } else {
           this.setState({ cvcTextError: 'Cvc should be 3 number. Example 123.' })
@@ -174,6 +174,7 @@ class Products extends React.Component {
 							onChange={this.handleChange.bind(this)}/>
 						<br/>
 		    </Dialog>
+        <Messages messages={this.props.messages}/>
 				<h2>Your cards</h2>
 				{
 					this.state.cards.map(card => {

@@ -105,12 +105,8 @@ class AdminCard extends RoleAwareComponent {
 
 	render() {
 		const {number, value, fullname, cvc, month, year, numberTextError, bankNameTextError, fullnameTextError, cvcTextError, monthTextError, yearTextError} = this.state;
-		let isDisabled = true;
-
-		if (number && value && fullname && cvc && month && year &&
-			 numberTextError == '' && bankNameTextError == '' && fullnameTextError == '' && cvcTextError == '' && monthTextError == '' && yearTextError == '') {
-			isDisabled = false;
-		}
+		let isDisabled = !(number && value >= 0 && fullname && cvc && month && year &&
+			 !numberTextError && !bankNameTextError && !fullnameTextError && !cvcTextError && !monthTextError && !yearTextError);
 
 		const empty = value >= 0;
 
