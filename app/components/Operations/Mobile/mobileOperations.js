@@ -9,11 +9,7 @@ class MobileOperations extends React.Component {
 				<div className="panel">
 					<div className="panel-body">
 						<h3>Mobile payments</h3>
-
-						<Operator title="Velcom"/>
-						<Operator title="MTS"/>
-						<Operator title="Life"/>
-
+						<p>Your can payment mobile phone.</p>
 						<a href="/operations/phone" role="button" className="btn btn-default">More</a>
 					</div>
 				</div>

@@ -16,7 +16,7 @@ class OperationHistory extends React.Component {
 		let _this = this;
 		getAll(JSON.parse(localStorage.getItem('user'))._id)
 			.then((response) => {
-				_this.setState({ operations: response.operations });
+				_this.setState({ operations: response.operations[0] });
 			});
 	}
 
@@ -29,8 +29,8 @@ class OperationHistory extends React.Component {
 					if (operation && operation.length != 0) {
 						return <div>
 							<ul className="list-group">
-								<li className="list-group-item">Bill from: {operation[0].billFrom} <span className="badge">{operation[0].price}</span></li>
-								<li className="list-group-item">Bill to: {operation[0].billTo} </li>
+								<li className="list-group-item">Bill from: {operation.billFrom} <span className="badge">{operation.price}</span></li>
+								<li className="list-group-item">Bill to: {operation.billTo} </li>
 							</ul>
 						</div>
 					}

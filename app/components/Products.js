@@ -22,7 +22,7 @@ class Products extends React.Component {
     super(props);
     this.state = {
 			number: '',
-			fullname: '',
+			fullName: '',
 			cvc: '',
 			month: '',
 			year: '',
@@ -79,7 +79,7 @@ class Products extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.dispatch(addExisting(this.state.number, this.state.fullname, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id));
+    this.props.dispatch(addExisting(this.state.number, this.state.fullName, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id));
   }
 	componentDidMount() {
 		let _this = this;
@@ -114,7 +114,7 @@ class Products extends React.Component {
         primary={true}
 				disabled={isDisabled}
         keyboardFocused={true}
-        onTouchTap={this.handleClose.bind(this)}
+        onTouchTap={this.handleSubmit.bind(this)}
       />,
     ];
 
@@ -133,6 +133,7 @@ class Products extends React.Component {
 							autoScrollBodyContent={true}
 		          onRequestClose={this.handleClose}
 		        >
+            <Messages messages={this.props.messages}/>
 						<TextField
 							name="number"
 							value={this.state.number}
@@ -174,7 +175,7 @@ class Products extends React.Component {
 							onChange={this.handleChange.bind(this)}/>
 						<br/>
 		    </Dialog>
-        <Messages messages={this.props.messages}/>
+
 				<h2>Your cards</h2>
 				{
 					this.state.cards.map(card => {

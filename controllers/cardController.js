@@ -103,11 +103,11 @@ exports.cardPost = function(req, res, next) {
 					}
 				}
 				if(result == -1){
-					if(req.body.number === card.number &&
-						 req.body.fullName === card.fullName &&
-						 req.body.cvc === card.cvc &&
-						 req.body.month === card.month &&
-						 req.body.year === card.year
+					if(req.body.number == card.number &&
+						 req.body.fullName == card.fullName &&
+						 req.body.cvc == card.cvc &&
+						 req.body.month == card.month &&
+						 req.body.year == card.year
 						){
 							 res.send({ card: card });
 					}

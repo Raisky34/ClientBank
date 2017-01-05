@@ -107,12 +107,15 @@ exports.getAll = function(req, res, next) {
     },
     function(user, done) {
       user.card.map((id) => {
-        asyncArray.push((done) => {
-          Transactions.find({ billFrom: id }, function(err, transaction) {
-            transferArray.push(transaction);
-            done();
-          });
-        })
+          asyncArray.push((done) => {
+            Card.findById(id, function(err, card) {
+              Transactions.find({ billFrom: card.number }, function(err, transaction) {
+                console.log(transaction);
+                transferArray.push(transaction);
+                done();
+              });
+            });
+          })
       });
       asyncArray.push((done) => {
         res.send({ operations: transferArray });
