@@ -3,7 +3,7 @@ import cookie from 'react-cookie';
 import { browserHistory } from 'react-router';
 
 export function getAllUserCards(userId) {
-    return fetch('/card/getAll', {
+    return fetch('/allUserCards', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -41,8 +41,7 @@ export function addExisting(number, fullName, cvc, month, year, userId) {
         return response.json().then((json) => {
           dispatch({
             type: 'ADD_CARD_SUCCESS',
-            balance: json.card.balance,
-            card: json.card
+            messages: [json]
           });
         });
       } else {

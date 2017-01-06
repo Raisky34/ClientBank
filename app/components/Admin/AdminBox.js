@@ -11,6 +11,10 @@ import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Person from 'material-ui/svg-icons/social/person';
+import AccountIcon from 'material-ui/svg-icons/action/account-circle';
+import ActionInfo from 'material-ui/svg-icons/action/info';
+import EmailIcon from 'material-ui/svg-icons/communication/email';
+import LocationIcon from 'material-ui/svg-icons/maps/place';
 import CreditCard from 'material-ui/svg-icons/action/credit-card';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -84,7 +88,7 @@ class AdminBox extends RoleAwareComponent {
 
     const jsx = (
 			<MuiThemeProvider muiTheme={getMuiTheme()}>
-		  	<div>
+		  	<div className="container">
 					<Dialog
 								title="Client info"
 								actions={actions}
@@ -93,47 +97,45 @@ class AdminBox extends RoleAwareComponent {
 								autoScrollBodyContent={true}
 								onRequestClose={this.handleClose}
 							>
-							<TextField
-								defaultValue={this.state.selectedUser.name}
-								disabled={true}
-	              floatingLabelText="Client name"
-	              hintText={this.state.selectedUser.name}/>
-							&nbsp;
-							<TextField
-								defaultValue={this.state.selectedUser.email }
-								disabled={true}
-	              floatingLabelText="Client email"
-	              hintText={this.state.selectedUser.email}/>
-							<br/>
-							<TextField
-								defaultValue={this.state.selectedUser.gender ? this.state.selectedUser.gender : "Didn't decide" }
-								disabled={true}
-	              floatingLabelText="Client gender"
-	              hintText={this.state.selectedUser.gender ? this.state.selectedUser.gender : "Didn't decide"}/>
-							&ensp;
-							<TextField
-								defaultValue={this.state.selectedUser.location ? this.state.selectedUser.location : "Didn't decide"}
-								disabled={true}
-	              floatingLabelText="Client location"
-	              hintText={this.state.selectedUser.location ? this.state.selectedUser.location : "Didn't decide"}/>
-							<br/>
-								<List>
-	            		<Subheader>Client cards</Subheader>
-									{
-										this.state.selectedUserCards.map(card => {
-											return <ListItem
-																leftAvatar={ <Avatar icon={<CreditCard />} /> }
-																primaryText={card.number}
-																secondaryText={
-																	<p>
-																		<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
-																	</p>
-																}
-														 />
-										})
-									}
-								</List>
-							<br/>
+							<List>
+								<ListItem
+									 primaryText={this.state.selectedUser.name}
+									 secondaryText="Client name"
+									 leftIcon={<AccountIcon />} />
+								<Divider inset={true} />
+								<ListItem
+									primaryText={this.state.selectedUser.email}
+									secondaryText="Client email"
+									leftIcon={<EmailIcon />} />
+								<Divider inset={true} />
+								<ListItem
+									primaryText={this.state.selectedUser.gender ? this.state.selectedUser.gender : "Didn't decide"}
+									secondaryText="Client gender"
+									leftIcon={<ActionInfo />} />
+								<Divider inset={true} />
+								<ListItem
+									primaryText={this.state.selectedUser.location ? this.state.selectedUser.location : "Didn't decide"}
+									secondaryText="Client location"
+									leftIcon={<LocationIcon />} />
+							</List>
+							<Divider />
+							<List>
+	          		<Subheader>Client cards</Subheader>
+								{
+									this.state.selectedUserCards.map(card => {
+										return <ListItem
+															leftAvatar={ <Avatar icon={<CreditCard />} /> }
+															primaryText={card.number}
+															secondaryText={
+																<p>
+																	<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
+																</p>
+															}
+													 />
+									})
+								}
+							</List>
+							<Divider />
 					</Dialog>
 	      	<List>
 	        	<Subheader>Users</Subheader>

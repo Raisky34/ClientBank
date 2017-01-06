@@ -57,7 +57,7 @@ class AdminCard extends RoleAwareComponent {
 				}
 				break;
 			case 'cvc':
-	      if (event.target.value.match(/^[0-9]{3}$/)) {
+	      if (parseInt(event.target.value, 10) >= 0 && event.target.value.match(/^[0-9]{3}$/)) {
 	        this.setState({ cvcTextError: '' })
 	      } else {
 	        this.setState({ cvcTextError: 'Invalid card cvc. Example 123'})

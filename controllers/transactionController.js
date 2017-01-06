@@ -47,7 +47,6 @@ exports.paymentPost = function(req, res, next) {
 				price: req.body.price
 			});
 			transactions.save(function(err) {
-				//res.send({ transactions: transactions });
 				res.send({ msg: "Payment successfully." });
 			});
   	});
@@ -99,6 +98,7 @@ exports.transferPost = function(req, res, next) {
 exports.getAll = function(req, res, next) {
   let transferArray = [];
   let asyncArray = [];
+
   async.waterfall([
     function(done) {
       User.findById(req.body.userId, function(err, user) {
@@ -110,8 +110,9 @@ exports.getAll = function(req, res, next) {
           asyncArray.push((done) => {
             Card.findById(id, function(err, card) {
               Transactions.find({ billFrom: card.number }, function(err, transaction) {
-                console.log(transaction);
-                transferArray.push(transaction);
+								transaction.forEach(function(operation) {
+	                transferArray.push(operation);
+								})
                 done();
               });
             });
