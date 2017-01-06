@@ -7,6 +7,18 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import Avatar from 'material-ui/Avatar';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import CreditCard from 'material-ui/svg-icons/action/credit-card';
+import Money from 'material-ui/svg-icons/editor/attach-money';
+import ActionInfo from 'material-ui/svg-icons/action/info';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
@@ -14,8 +26,18 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const style = {
-  marginRight: 20
+  width: '100%'
 };
+
+const iconButtonElement = (
+  <IconButton
+    touch={true}
+    tooltip="more"
+    tooltipPosition="bottom-left"
+  >
+    <MoreVertIcon color={grey400} />
+  </IconButton>
+);
 
 class Products extends React.Component {
 	constructor(props) {
@@ -28,6 +50,8 @@ class Products extends React.Component {
 			year: '',
 			cards: [],
 			open: false,
+			openCardInfo: false,
+			selectedCard: '',
       numberTextError: '',
       cvcTextError: '',
       monthTextError: '',
@@ -39,35 +63,36 @@ class Products extends React.Component {
   handleChange(event) {
     switch(event.target.name) {
       case 'number':
-        if (parseFloat(event.target.value) >= 0 && event.target.value.length == 16) {
+        if (event.target.value.match(/^[0-9]{16}$/)) {
           this.setState({ numberTextError: '' })
         } else {
-          this.setState({ numberTextError: 'Invalid card number. Example 1234 5678 9012 3456.' })
+          this.setState({ numberTextError: 'Invalid card number. Example 1234123412341234' })
         }
         break;
       case 'fullName':
-        if (event.target.value.length > 0 && (event.target.value.match(/^[A-z]+/))) {
+        if (event.target.value.match(/^[a-zA-Z-]+( [a-zA-Z-]+)*$/)) {
           this.setState({ fullNameTextError: '' })
         } else {
-          this.setState({ fullNameTextError: 'Should be not empty and should be text.' })
+          this.setState({ fullNameTextError: 'Please use only letters (a-z) and hyphens.' })
         }
         break;
       case 'cvc':
-        if (parseFloat(event.target.value) >= 0 && event.target.value.length == 3) {
+        if (parseInt(event.target.value, 10) >= 0 && event.target.value.match(/^[0-9]{3}$/)) {
           this.setState({ cvcTextError: '' })
         } else {
-          this.setState({ cvcTextError: 'Cvc should be 3 number. Example 123.' })
+          this.setState({ cvcTextError: 'Invalid card cvc. Example 123' })
         }
         break;
       case 'month':
-        if (parseFloat(event.target.value) >= 1 && parseFloat(event.target.value) <= 12) {
+        if (event.target.value.match(/^[0-9]{2}$/) && parseInt(event.target.value, 10) >= 1 && parseInt(event.target.value, 10) <= 12) {
           this.setState({ monthTextError: '' })
         } else {
           this.setState({ monthTextError: 'Month should be number 1 to 12. Example 6 or 06.' })
         }
         break;
       case 'year':
-        if (parseFloat(event.target.value) >= 2017 && parseFloat(event.target.value) <= 2045) {
+				var currentYear = new Date().getFullYear();
+        if (event.target.value.match(/^[0-9]{4}$/) && parseInt(event.target.value, 10) >= currentYear && parseInt(event.target.value, 10) <= currentYear + 5 ) {
           this.setState({ yearTextError: '' })
         } else {
           this.setState({ yearTextError: 'Year should be number at 2017 or bigger. Example 2022.' })
@@ -77,15 +102,20 @@ class Products extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+	handleMenuItemClick(card, event){
+		this.setState({openCardInfo: true, selectedCard: card});
+	}
+
   handleSubmit(event) {
     event.preventDefault();
     this.props.dispatch(addExisting(this.state.number, this.state.fullName, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id));
+		//this.handleClose();
   }
+
 	componentDidMount() {
-		let _this = this;
 		getAllUserCards(JSON.parse(localStorage.getItem('user'))._id)
 			.then((response) => {
-				_this.setState({ cards: response.cards });
+				this.setState({ cards: response.cards });
 			});
 	}
 
@@ -97,12 +127,26 @@ class Products extends React.Component {
     this.setState({open: false});
   };
 
+	handleCloseCardInfo() {
+		this.setState({openCardInfo: false});
+	};
+
+	getRightIconMenu(card){
+		return (
+			<IconMenu iconButtonElement={iconButtonElement} >
+				<MenuItem onTouchTap={this.handleMenuItemClick.bind(this, card)}>Info</MenuItem>
+			</IconMenu>
+		)
+	}
+
 	render() {
 		const {number, cvc, fullName, month, year,
       numberTextError, cvcTextError, monthTextError, yearTextError, fullNameTextError} = this.state;
+
 		let isDisabled = !(number && cvc && fullName && month && year
       && !numberTextError && !cvcTextError && !monthTextError
       && !yearTextError && !fullNameTextError);
+
 		const actions = [
       <FlatButton
         label="Cancel"
@@ -118,11 +162,19 @@ class Products extends React.Component {
       />,
     ];
 
-		let _this = this;
+		const actionsCardInfo = [
+      <FlatButton
+        label="Close"
+        primary={true}
+				keyboardFocused={true}
+        onTouchTap={this.handleCloseCardInfo.bind(this)}
+      />,
+    ];
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme()}>
       <div className="container">
-				<FloatingActionButton mini={true} secondary={true} style={style} onTouchTap={this.handleOpen.bind(this)}>
+				<FloatingActionButton mini={true} secondary={true} onTouchTap={this.handleOpen.bind(this)}>
 				  <ContentAdd />
 				</FloatingActionButton>
 				<Dialog
@@ -141,7 +193,7 @@ class Products extends React.Component {
 							floatingLabelText="Card number"
               errorText= {this.state.numberTextError}
 							onChange={this.handleChange.bind(this)}/>
-						&nbsp;
+						<br/>
 						<TextField
 							name="fullName"
 							value={this.state.fullName}
@@ -157,7 +209,7 @@ class Products extends React.Component {
 							floatingLabelText="CVC"
               errorText= {this.state.cvcTextError}
 							onChange={this.handleChange.bind(this)}/>
-						&ensp;
+						<br/>
 						<TextField
 							name="month"
 							value={this.state.month}
@@ -176,23 +228,70 @@ class Products extends React.Component {
 						<br/>
 		    </Dialog>
 
-				<h2>Your cards</h2>
-				{
-					this.state.cards.map(card => {
-						if (card) {
+				<Dialog
+							title="Card info"
+							actions={actionsCardInfo}
+							modal={false}
+							open={this.state.openCardInfo}
+							autoScrollBodyContent={true}
+							onRequestClose={this.handleCloseCardInfo}
+						>
+						<List>
+							<ListItem
+								primaryText={this.state.selectedCard.number}
+								secondaryText="Card number"
+								leftIcon={<ActionInfo />} />
+							<Divider inset={true} />
+							<ListItem
+								primaryText={this.state.selectedCard.fullName}
+								secondaryText="Client full name"
+								leftIcon={<ActionInfo />} />
+							<Divider inset={true} />
+							<ListItem
+								primaryText={this.state.selectedCard.bankName}
+								secondaryText="Card bank"
+								leftIcon={<ActionInfo />} />
+							<Divider inset={true} />
+							<ListItem
+								primaryText={this.state.selectedCard.cvc}
+								secondaryText="Card cvc"
+								leftIcon={<ActionInfo />} />
+							<Divider inset={true} />
+							<ListItem
+								primaryText={this.state.selectedCard.month + "/" + this.state.selectedCard.year}
+								secondaryText="Valid thru"
+								leftIcon={<ActionInfo />} />
+							<Divider inset={true} />
+							<ListItem
+								primaryText={this.state.selectedCard.balance}
+								secondaryText="Card balance"
+								leftIcon={<Money />} />
+							<Divider inset={true} />
+						</List>
+				</Dialog>
+				<List>
+					<Subheader>Your cards</Subheader>
+					{
+						this.state.cards.map(card => {
+							if(!card) return;
 							return <div>
-  							<ul className="list-group">
-									<li className="list-group-item">Card number: {card.number} <span className="badge">{card.balance}</span></li>
-									<li className="list-group-item">Expiring: {card.month}/{card.year} </li>
-  							</ul>
+								<ListItem
+									onTouchTap={this.handleMenuItemClick.bind(this, card)}
+									leftAvatar={ <Avatar icon={<CreditCard />} /> }
+									rightIconButton={this.getRightIconMenu(card)}
+									primaryText={card.number}
+									secondaryText={
+										<p>
+											<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
+										</p>
+									}
+									secondaryTextLines={1}
+								/>
+								<Divider inset={true} />
 							</div>
-						} else {
-							return;
-						}
-
-					})
-				}
-
+						})
+					}
+				</List>
       </div>
 			</MuiThemeProvider>
     );

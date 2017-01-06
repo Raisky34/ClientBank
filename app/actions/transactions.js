@@ -1,5 +1,5 @@
-export function getAll(userId) {
-    return fetch('/transfers/getAll', {
+export function getAllTransactions(userId) {
+    return fetch('/allTransactions', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

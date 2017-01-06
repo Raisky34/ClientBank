@@ -109,7 +109,7 @@ exports.cardPost = function(req, res, next) {
 						 req.body.month == card.month &&
 						 req.body.year == card.year
 						){
-							 res.send({ card: card });
+							 res.send({ msg: "Add card to your account successfully." });
 					}
 					else {
 						return res.status(400).send({ msg: 'The entered card information is not valid' });

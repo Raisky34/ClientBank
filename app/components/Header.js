@@ -47,10 +47,10 @@ class Header extends React.Component {
 				leftNav = (
 					<ul className="nav navbar-nav">
 						<li><IndexLink to="/" activeStyle={active}>Home</IndexLink></li>
-						<li><Link to="/contact" activeStyle={active}>Contact</Link></li>
 						<li><Link to="/operations" activeStyle={active}>Operations</Link></li>
-						<li><Link to="/products" activeStyle={active}>My Products</Link></li>
+						<li><Link to="/products" activeStyle={active}>My Cards</Link></li>
 						<li><Link to="/history" activeStyle={active}>Operations History</Link></li>
+						<li><Link to="/contact" activeStyle={active}>Contact</Link></li>
 					</ul>
 				)
 			}
@@ -73,7 +73,7 @@ class Header extends React.Component {
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<IndexLink to="/" className="navbar-brand">Project name</IndexLink>
+						<IndexLink to="/" className="navbar-brand">Client Bank</IndexLink>
 					</div>
 					<div id="navbar" className="navbar-collapse collapse">
 						{leftNav}
