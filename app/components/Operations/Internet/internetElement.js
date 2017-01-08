@@ -225,7 +225,7 @@ class InternetTransaction extends React.Component {
   handleChange(event) {
     switch(event.target.name) {
       case 'number':
-        if (event.target.value.match(/^[0-9]{13,16})*$/i)) {
+        if (event.target.value.match(/^[0-9]{13,16}$/i)) {
           this.setState({ numberTextError: '' })
         } else {
           this.setState({ numberTextError: 'Invalid agreement number. Example 123456789012.' })
