@@ -17,6 +17,17 @@ exports.cardDelete = function(req, res, next) {
   });
 };
 
+exports.existingCardRemove = function(req, res, next) {
+	User.findById(req.body.userId, function(err, user) {
+		if (user.card.indexOf(req.body.cardId) === -1) {
+			return res.status(400).send({ msg: 'Unnable to delete choosen card. Possibly you have internet connection problems.' });
+		}
+		user.card.splice( user.card.indexOf(req.body.cardId), 1);
+		user.save();
+		res.send({ msg: 'Your card has been removed.' });
+	})
+};
+
 exports.getInfo = function(req, res, next) {
   Card.get({ _id: req.card.id }, function(err, card) {
     res.send({ card: card });

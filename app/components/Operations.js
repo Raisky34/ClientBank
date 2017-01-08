@@ -9,13 +9,15 @@ class Operations extends React.Component {
 		return (
 			<div className="container-fluid">
 				<div className="row">
-					<MobileOperations />
+					<div>
+						<MobileOperations />
+					</div>
+					<div>
+						<InternetList />
+					</div>
 				</div>
 				<div className="row">
 					<TransferList />
-				</div>
-				<div className="row">
-					<InternetList />
 				</div>
 			</div>
 		);

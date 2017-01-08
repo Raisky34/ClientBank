@@ -6,7 +6,11 @@ import Messages from './Messages';
 class Contact extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: '', email: '', message: '' };
+    this.state = {
+			name: '',
+			email: '',
+			message: ''
+		};
   }
 
   handleChange(event) {
@@ -17,6 +21,10 @@ class Contact extends React.Component {
     event.preventDefault();
     this.props.dispatch(submitContactForm(this.state.name, this.state.email, this.state.message));
   }
+
+	componentDidMount() {
+			this.setState({ email: JSON.parse(localStorage.getItem('user')).email });
+	}
 
   render() {
     return (

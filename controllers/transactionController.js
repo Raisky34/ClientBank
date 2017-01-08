@@ -119,6 +119,9 @@ exports.getAll = function(req, res, next) {
           })
       });
       asyncArray.push((done) => {
+				transferArray.sort(function(a, b) {
+					return (a.createdAt < b.createdAt) ? 1 : ((a.createdAt > b.createdAt) ? -1 : 0);
+				});
         res.send({ operations: transferArray });
         done();
       });
