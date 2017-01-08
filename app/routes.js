@@ -14,6 +14,7 @@ import Products from './components/Products';
 import OperationHistory from './components/OperationHistory';
 import MobileTransaction from './components/Operations/Mobile/mobileTransaction';
 import Transfers from './components/Operations/Transfers/transferElement';
+import Internet from './components/Operations/Internet/internetElement';
 import Admin from './components/Admin/Admin';
 import AdminBox from './components/Admin/AdminBox';
 import AdminCard from './components/Admin/AdminCard';
@@ -53,6 +54,7 @@ export default function getRoutes(store) {
       <Route path="/history" component={OperationHistory} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
       <Route path="/operations/phone" component={MobileTransaction} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
       <Route path="/operations/transfers" component={Transfers} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
+      <Route path="/operations/internet" component={Internet} onEnter={ensureAuthenticated} onLeave={clearMessages}/>
       <Route path='/reset/:token' component={Reset} onEnter={skipIfAuthenticated} onLeave={clearMessages}/>
       <Route path="*" component={NotFound} onLeave={clearMessages}/>
     </Route>

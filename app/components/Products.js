@@ -13,8 +13,10 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CreditCard from 'material-ui/svg-icons/action/credit-card';
+import AddShoppingCart from 'material-ui/svg-icons/action/add-shopping-cart';
 import Money from 'material-ui/svg-icons/editor/attach-money';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import IconMenu from 'material-ui/IconMenu';
@@ -24,9 +26,21 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Chip from 'material-ui/Chip';
+import {blue300, indigo900} from 'material-ui/styles/colors';
 
 const style = {
   width: '100%'
+};
+
+const styles = {
+  chip: {
+    margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
 };
 
 const iconButtonElement = (
@@ -174,9 +188,15 @@ class Products extends React.Component {
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme()}>
       <div className="container">
-				<FloatingActionButton mini={true} secondary={true} onTouchTap={this.handleOpen.bind(this)}>
-				  <ContentAdd />
-				</FloatingActionButton>
+        <div style={styles.wrapper}>
+          <Chip
+            onTouchTap={this.handleOpen.bind(this)}
+            style={styles.chip}
+          >
+          <Avatar size={32} icon={<AddShoppingCart />} />
+            Add new card
+          </Chip>
+        </div>
 				<Dialog
 		          title="Add existing card"
 		          actions={actions}
