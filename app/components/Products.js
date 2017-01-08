@@ -121,9 +121,9 @@ class Products extends React.Component {
 	}
 
   handleSubmit(event) {
+    let _this = this;
     event.preventDefault();
-    this.props.dispatch(addExisting(this.state.number, this.state.fullName, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id));
-		//this.handleClose();
+    this.props.dispatch(addExisting(this.state.number, this.state.fullName, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id)).then(()=>{_this.updateCards();});
   }
 
 	componentDidMount() {
@@ -132,6 +132,17 @@ class Products extends React.Component {
 				this.setState({ cards: response.cards });
 			});
 	}
+
+  updateCards() {
+    let _this = this;
+    setTimeout(() => {
+      getAllUserCards(JSON.parse(localStorage.getItem('user'))._id)
+  			.then((response) => {
+  				_this.setState({ cards: response.cards });
+  			});
+    }, 1000);
+
+  }
 
 	handleOpen() {
     this.setState({open: true});
