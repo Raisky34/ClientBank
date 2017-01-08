@@ -15,6 +15,7 @@ export default function messages(state = {}, action) {
 		case 'CREATE_CARD_FAIL':
 		case 'CREATE_BILL_FAIL':
 		case 'ADD_CARD_FAILURE':
+    case 'REMOVE_CARD_FAILURE':
       return {
         error: action.messages
       };
@@ -27,6 +28,7 @@ export default function messages(state = {}, action) {
 		case 'CREATE_CARD_SUCCESS':
 		case 'CREATE_BILL_SUCCESS':
 		case 'ADD_CARD_SUCCESS':
+    case 'REMOVE_CARD_SUCCESS':
       return {
         success: action.messages
       };

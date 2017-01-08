@@ -20,6 +20,33 @@ export function getAllUserCards(userId) {
     });
 }
 
+export function removeExisting(cardId, userId) {
+    return fetch('/card/removeExisting', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cardId: cardId,
+        userId: userId
+      })
+    }).then((response) => {
+      if (response.ok) {
+        return response.json().then((json) => {
+          dispatch({
+            type: 'REMOVE_CARD_SUCCESS',
+            messages: [json]
+          });
+        });
+      } else {
+        return response.json().then((json) => {
+          dispatch({
+            type: 'REMOVE_CARD_FAILURE',
+            messages: Array.isArray(json) ? json : [json]
+          });
+        });
+      }
+    });
+}
+
 export function addExisting(number, fullName, cvc, month, year, userId) {
   return (dispatch) => {
     dispatch({

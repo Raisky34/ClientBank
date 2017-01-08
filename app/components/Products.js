@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Messages from './Messages';
-import { addExisting, getAllUserCards } from '../actions/card';
+import { addExisting, removeExisting, getAllUserCards } from '../actions/card';
 import Product from './Operations/Products/Product';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -120,6 +120,10 @@ class Products extends React.Component {
 		this.setState({openCardInfo: true, selectedCard: card});
 	}
 
+  handleMenuItemClickRemove(card, event) {
+    this.props.dispatch(removeExisting(card._id, JSON.parse(localStorage.getItem('user'))._id)).then(()=>{_this.updateCards();});
+  }
+
   handleSubmit(event) {
     let _this = this;
     event.preventDefault();
@@ -160,6 +164,7 @@ class Products extends React.Component {
 		return (
 			<IconMenu iconButtonElement={iconButtonElement} >
 				<MenuItem onTouchTap={this.handleMenuItemClick.bind(this, card)}>Info</MenuItem>
+        <MenuItem onTouchTap={this.handleMenuItemClickRemove.bind(this, card)}>Remove</MenuItem>
 			</IconMenu>
 		)
 	}
