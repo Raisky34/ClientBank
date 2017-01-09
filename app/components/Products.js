@@ -84,10 +84,10 @@ class Products extends React.Component {
         }
         break;
       case 'fullName':
-        if (event.target.value.match(/^[a-zA-Z-]+( [a-zA-Z-]+)*$/)) {
+        if (event.target.value.match(/^[A-Z-]+( [A-Z-]+)*$/)) {
           this.setState({ fullNameTextError: '' })
         } else {
-          this.setState({ fullNameTextError: 'Please use only letters (a-z) and hyphens.' })
+          this.setState({ fullNameTextError: 'Please use only letters (A-Z) and hyphens.' })
         }
         break;
       case 'cvc':

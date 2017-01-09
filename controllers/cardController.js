@@ -96,42 +96,54 @@ exports.newCardPost = function(req, res, next) {
 exports.cardPost = function(req, res, next) {
   var errors = req.validationErrors();
   var isNewCard = false;
+  var isOther = false;
   if (errors) {
     return res.status(400).send(errors);
   }
+  User.find({card:{$in: [req.body.cardId]}})
   Card.findOne({ number: req.body.number }, function(err, card) {
       if (!card) {
         isNewCard = true;
         return res.status(400).send({ msg: 'The card number you have entered not exist.' });
+      } else {
+        User.find({
+          card: {
+            $in: [req.body.cardId]
+          }
+        }, function(err, card) {
+          if (card) {
+            return res.status(400).send({ msg: 'The card has been added in other account.' });
+          } else {
+            let cardId = card._id;
+            User.findById(req.body.userId, function(err, user) {
+      				var result = -1;
+      				for (var i = 0; i < user.card.length; i++) {
+      					if (user.card[i].toString() === cardId.toString()) {
+      						result = 1;
+      					}
+      				}
+      				if(result == -1){
+      					if(req.body.number == card.number &&
+      						 req.body.fullName == card.fullName &&
+      						 req.body.cvc == card.cvc &&
+      						 req.body.month == card.month &&
+      						 req.body.year == card.year
+      						){
+      							 res.send({ msg: "Add card to your account successfully." });
+      					}
+      					else {
+      						return res.status(400).send({ msg: 'The entered card information is not valid' });
+      					}
+
+      					user.card.push(cardId);
+      					user.save();
+      				}
+      				else {
+      					return res.status(400).send({ msg: 'Card already added to your account' });
+      				}
+            });
+          }
+        });
       }
-
-      let cardId = card._id;
-      User.findById(req.body.userId, function(err, user) {
-				var result = -1;
-				for (var i = 0; i < user.card.length; i++) {
-					if (user.card[i].toString() === cardId.toString()) {
-						result = 1;
-					}
-				}
-				if(result == -1){
-					if(req.body.number == card.number &&
-						 req.body.fullName == card.fullName &&
-						 req.body.cvc == card.cvc &&
-						 req.body.month == card.month &&
-						 req.body.year == card.year
-						){
-							 res.send({ msg: "Add card to your account successfully." });
-					}
-					else {
-						return res.status(400).send({ msg: 'The entered card information is not valid' });
-					}
-
-					user.card.push(cardId);
-					user.save();
-				}
-				else {
-					return res.status(400).send({ msg: 'Card already added to your account' });
-				}
-      });
     });
 };

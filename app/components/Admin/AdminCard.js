@@ -50,10 +50,10 @@ class AdminCard extends RoleAwareComponent {
         }
         break;
 			case 'fullname':
-				if (event.target.value.match(/^[a-zA-Z-]+( [a-zA-Z-]+)*$/)) {
+				if (event.target.value.match(/^[A-Z-]+( [A-Z-]+)*$/)) {
 					this.setState({ fullnameTextError: '' })
 				} else {
-					this.setState({ fullnameTextError: 'Please use only letters (a-z) and hyphens.'})
+					this.setState({ fullnameTextError: 'Please use only letters (A-Z) and hyphens.'})
 				}
 				break;
 			case 'cvc':
