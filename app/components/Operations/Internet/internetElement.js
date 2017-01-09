@@ -115,33 +115,44 @@ class InternetTransaction extends React.Component {
     let _this = this;
     switch (stepIndex) {
       case 0:
-        return (
-          <div>
-            <p>
-              Select your card for make payment.
-            </p>
-            <Table
-              onRowSelection={this._onRowSelection.bind(this)}
-              selectable={true}>
-                <TableHeader>
-                  <TableRow>
-                    <TableHeaderColumn>Number</TableHeaderColumn>
-                    <TableHeaderColumn>Balance</TableHeaderColumn>
-                    <TableHeaderColumn>Experation date</TableHeaderColumn>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {this.state.cards.map(item => {
-                    return <TableRow key={item._id} selected={(_this.state.choosenCard.number == item.number)}>
-                      <TableRowColumn>{item.number}</TableRowColumn>
-                      <TableRowColumn>{item.balance}</TableRowColumn>
-                      <TableRowColumn>{item.month}/{item.year}</TableRowColumn>
-                    </TableRow>;
-                  })}
-                </TableBody>
-              </Table>
-          </div>
-        );
+        if (this.state.cards.length != 0) {
+          return (
+            <div>
+              <p>
+                Select your card for make payment.
+              </p>
+              <Table
+                onRowSelection={this._onRowSelection.bind(this)}
+                selectable={true}>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHeaderColumn>Number</TableHeaderColumn>
+                      <TableHeaderColumn>Balance</TableHeaderColumn>
+                      <TableHeaderColumn>Experation date</TableHeaderColumn>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {this.state.cards.map(item => {
+                      return <TableRow key={item._id} selected={(_this.state.choosenCard.number == item.number)}>
+                        <TableRowColumn>{item.number}</TableRowColumn>
+                        <TableRowColumn>{item.balance}</TableRowColumn>
+                        <TableRowColumn>{item.month}/{item.year}</TableRowColumn>
+                      </TableRow>;
+                    })}
+                  </TableBody>
+                </Table>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <p>
+                You can't payment this operation, because you have not a card. Please go to Cards page or push button for to go on the page and add card.
+              </p>
+              <a href="/products" role="button" className="btn btn-default">Card page</a>
+            </div>
+          );
+        }
       case 1:
         return (
           <div>

@@ -179,6 +179,27 @@ class Products extends React.Component {
       && !numberTextError && !cvcTextError && !monthTextError
       && !yearTextError && !fullNameTextError);
 
+
+      let renderElement = (this.state.cards.length != 0) ? this.state.cards.map(card => {
+        if(!card) return;
+        return <div>
+          <ListItem
+            onTouchTap={this.handleMenuItemClick.bind(this, card)}
+            leftAvatar={ <Avatar icon={<CreditCard />} /> }
+            rightIconButton={this.getRightIconMenu(card)}
+            primaryText={card.number}
+            secondaryText={
+              <p>
+                <span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
+                Balance: {card.balance}
+              </p>
+            }
+            secondaryTextLines={2}
+          />
+          <Divider inset={true} />
+        </div>
+      }) : <div>You don't have cards. Yoy may add card, click to Add card button on the top.</div>
+
 		const actions = [
       <FlatButton
         label="Cancel"
@@ -310,25 +331,7 @@ class Products extends React.Component {
 					<Messages messages={this.props.messages}/>
 					<Subheader>Your cards</Subheader>
 					{
-						this.state.cards.map(card => {
-							if(!card) return;
-							return <div>
-								<ListItem
-									onTouchTap={this.handleMenuItemClick.bind(this, card)}
-									leftAvatar={ <Avatar icon={<CreditCard />} /> }
-									rightIconButton={this.getRightIconMenu(card)}
-									primaryText={card.number}
-									secondaryText={
-										<p>
-											<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
-											Balance: {card.balance}
-										</p>
-									}
-									secondaryTextLines={2}
-								/>
-								<Divider inset={true} />
-							</div>
-						})
+						renderElement
 					}
 				</List>
       </div>

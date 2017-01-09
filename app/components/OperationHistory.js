@@ -78,6 +78,26 @@ class OperationHistory extends React.Component {
       />,
     ];
 
+    let renderElement = (this.state.operations.length != 0) ? this.state.operations.map(operation => {
+      if(!operation) return;
+      return <div>
+        <ListItem
+          onTouchTap={this.handleMenuItemClick.bind(this, operation)}
+          leftAvatar={ <Avatar icon={<Money />} /> }
+          rightIconButton={this.getRightIconMenu(operation)}
+          primaryText={operation.payInfo}
+          secondaryText={
+            <p>
+              <span style={{color: darkBlack}}>{"Money count: " + operation.price}</span><br />
+              Time: {new Date(operation.createdAt).toLocaleString()}
+            </p>
+          }
+          secondaryTextLines={2}
+        />
+        <Divider inset={true} />
+      </div>
+    }) : <div>You don't have transactions.</div>;
+
 		return (
 			<MuiThemeProvider muiTheme={getMuiTheme()}>
 			<div className="container">
@@ -120,25 +140,7 @@ class OperationHistory extends React.Component {
 				<List>
 					<Subheader>Your transactions</Subheader>
 					{
-						this.state.operations.map(operation => {
-							if(!operation) return;
-							return <div>
-								<ListItem
-									onTouchTap={this.handleMenuItemClick.bind(this, operation)}
-									leftAvatar={ <Avatar icon={<Money />} /> }
-									rightIconButton={this.getRightIconMenu(operation)}
-									primaryText={operation.payInfo}
-									secondaryText={
-										<p>
-											<span style={{color: darkBlack}}>{"Money count: " + operation.price}</span><br />
-											Time: {new Date(operation.createdAt).toLocaleString()}
-										</p>
-									}
-									secondaryTextLines={2}
-								/>
-								<Divider inset={true} />
-							</div>
-						})
+						renderElement
 					}
 				</List>
 			</div>
