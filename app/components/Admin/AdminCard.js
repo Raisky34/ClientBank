@@ -64,15 +64,36 @@ class AdminCard extends RoleAwareComponent {
 	      }
 	      break;
 			case 'month':
+				var currentYear = new Date().getFullYear();
+				var currentMonth = new Date().getMonth() + 1;
 				if (event.target.value.match(/^[0-9]{2}$/) && parseInt(event.target.value, 10) >= 1 && parseInt(event.target.value, 10) <= 12) {
 					this.setState({ monthTextError: '' })
+					if(parseInt(this.state.year, 10) == currentYear) {
+						if(parseInt(event.target.value, 10) >  currentMonth) {
+							this.setState({ monthTextError: '' })
+						}
+						else {
+							this.setState({ monthTextError: "You can't create card that expiring in current month"})
+						}
+					}
 				} else {
 					this.setState({ monthTextError: 'Invalid card expiring month. Example 02'})
 				}
 				break;
 			case 'year':
 				var currentYear = new Date().getFullYear();
+				var currentMonth = new Date().getMonth() + 1;
 				if (event.target.value.match(/^[0-9]{4}$/) && parseInt(event.target.value, 10) >= currentYear && parseInt(event.target.value, 10) <= currentYear + 5 ) {
+					if(parseInt(event.target.value, 10) == currentYear) {
+						if(this.state.month) {
+							if(parseInt(this.state.month, 10) >  currentMonth) {
+								this.setState({ monthTextError: '' })
+							}
+							else {
+								this.setState({ monthTextError: "You can't create card that expiring in current month"})
+							}
+						}
+					}
 					this.setState({ yearTextError: '' })
 				} else {
 					this.setState({ yearTextError: 'Invalid card expiring year. Example 2020'})
