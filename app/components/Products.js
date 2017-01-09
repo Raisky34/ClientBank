@@ -223,7 +223,6 @@ class Products extends React.Component {
 							autoScrollBodyContent={true}
 		          onRequestClose={this.handleClose}
 		        >
-            <Messages messages={this.props.messages}/>
 						<TextField
 							name="number"
 							value={this.state.number}

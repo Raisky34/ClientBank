@@ -129,8 +129,10 @@ class AdminBox extends RoleAwareComponent {
 															secondaryText={
 																<p>
 																	<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
+																	Balance: {card.balance}
 																</p>
 															}
+															secondaryTextLines={2}
 													 />
 									})
 								}
