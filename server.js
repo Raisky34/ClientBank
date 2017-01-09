@@ -104,6 +104,7 @@ app.post('/transfer', transactionController.transferPost);
 app.post('/allTransactions', transactionController.getAll);
 app.post('/mobileTransaction', mobileController.contactPost);
 app.post('/findBill', billController.getBillInfo);
+app.post('/card/removeExisting', cardController.existingCardRemove);
 
 //admin
 app.post('/allUsers', userController.getUsers);

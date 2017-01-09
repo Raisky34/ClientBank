@@ -21,13 +21,13 @@ import {
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
-const operatorList = [
+const providerList = [
   {
-    name: "BELTELECOM",
+    name: "BYFLY",
     value: 1
   },
   {
-    name: "MTIS",
+    name: "COSMOSTV",
     value: 2
   },
   {
@@ -35,7 +35,7 @@ const operatorList = [
     value: 3
   },
   {
-    name: "GARANT",
+    name: "DOMOVIK",
     value: 4
   },
   {
@@ -146,7 +146,7 @@ class InternetTransaction extends React.Component {
         return (
           <div>
             <p>
-              Enter data for your payment. Your need to input your telephone number, price and choose your operator.
+              Enter data for your payment. Your need to choose your provider, input your agreement number, price.
             </p>
             <TextField
               value={this.state.choosenCard.number}
@@ -155,10 +155,10 @@ class InternetTransaction extends React.Component {
               hintText={this.state.choosenCard.number} />
             <br/>
             <SelectField
-              floatingLabelText="Internet operator"
+              floatingLabelText="Internet provider"
               value={this.state.value}
               onChange={this.handleChangeMenu.bind(this)}>
-              {operatorList.map(item => {
+              {providerList.map(item => {
                 return <MenuItem value={item.value} primaryText={item.name} />;
               })}
             </SelectField>
@@ -191,10 +191,10 @@ class InternetTransaction extends React.Component {
               hintText={this.state.choosenCard.number} />
             <br/>
             <TextField
-              value={operatorList[this.state.value - 1].name}
+              value={providerList[this.state.value - 1].name}
               disabled={true}
-              floatingLabelText="Your opetator"
-              hintText={operatorList[this.state.value - 1].name} />
+              floatingLabelText="Your provider"
+              hintText={providerList[this.state.value - 1].name} />
             <br/>
             <TextField
               value={this.state.number}
@@ -243,7 +243,7 @@ class InternetTransaction extends React.Component {
   }
 
   pay() {
-		var payInfo = "Internet agreement payment. Operator: " + operatorList[this.state.value - 1].name;
+		var payInfo = "Internet payment. Agreement number: " + this.state.number + ". Provider: " + providerList[this.state.value - 1].name;
     this.props.dispatch(submitPayment(this.state.choosenCard._id, this.state.choosenCard.bankName, payInfo, this.state.price));
   }
 

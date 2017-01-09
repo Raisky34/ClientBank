@@ -121,6 +121,7 @@ class Products extends React.Component {
 	}
 
   handleMenuItemClickRemove(card, event) {
+		let _this = this;
     this.props.dispatch(removeExisting(card._id, JSON.parse(localStorage.getItem('user'))._id)).then(()=>{_this.updateCards();});
   }
 
@@ -128,6 +129,7 @@ class Products extends React.Component {
     let _this = this;
     event.preventDefault();
     this.props.dispatch(addExisting(this.state.number, this.state.fullName, this.state.cvc, this.state.month, this.state.year , JSON.parse(localStorage.getItem('user'))._id)).then(()=>{_this.updateCards();});
+		_this.handleClose();
   }
 
 	componentDidMount() {
@@ -306,6 +308,7 @@ class Products extends React.Component {
 						</List>
 				</Dialog>
 				<List>
+					<Messages messages={this.props.messages}/>
 					<Subheader>Your cards</Subheader>
 					{
 						this.state.cards.map(card => {
@@ -319,9 +322,10 @@ class Products extends React.Component {
 									secondaryText={
 										<p>
 											<span style={{color: darkBlack}}>{"Expiring " + card.month + "/" + card.year}</span><br />
+											Balance: {card.balance}
 										</p>
 									}
-									secondaryTextLines={1}
+									secondaryTextLines={2}
 								/>
 								<Divider inset={true} />
 							</div>

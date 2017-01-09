@@ -47,6 +47,30 @@ class Profile extends React.Component {
   }
 
   render() {
+		let deleteDiv;
+
+		if(this.props.user) {
+			if(this.props.user.role === 'client') {
+				deleteDiv = (
+					<div className="panel">
+						<div className="panel-body">
+							<form onSubmit={this.handleDeleteAccount.bind(this)} className="form-horizontal">
+								<legend>Delete Account</legend>
+								<div className="form-group">
+									<p className="col-sm-offset-3 col-sm-9">You can delete your account, but keep in mind this action is irreversible.</p>
+									<div className="col-sm-offset-3 col-sm-9">
+										<button type="submit" className="btn btn-danger">Delete my account</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				)
+			}
+			else {
+				deleteDiv = null;
+			}
+		}
     return (
       <div className="container">
         <div className="panel">
@@ -121,19 +145,7 @@ class Profile extends React.Component {
             </form>
           </div>
         </div>
-        <div className="panel">
-          <div className="panel-body">
-            <form onSubmit={this.handleDeleteAccount.bind(this)} className="form-horizontal">
-              <legend>Delete Account</legend>
-              <div className="form-group">
-                <p className="col-sm-offset-3 col-sm-9">You can delete your account, but keep in mind this action is irreversible.</p>
-                <div className="col-sm-offset-3 col-sm-9">
-                  <button type="submit" className="btn btn-danger">Delete my account</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+				{deleteDiv}
       </div>
     );
   }

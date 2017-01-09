@@ -21,6 +21,10 @@ export function getAllUserCards(userId) {
 }
 
 export function removeExisting(cardId, userId) {
+	return (dispatch) => {
+		dispatch({
+			type: 'CLEAR_MESSAGES'
+		});
     return fetch('/card/removeExisting', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -45,6 +49,7 @@ export function removeExisting(cardId, userId) {
         });
       }
     });
+	};
 }
 
 export function addExisting(number, fullName, cvc, month, year, userId) {

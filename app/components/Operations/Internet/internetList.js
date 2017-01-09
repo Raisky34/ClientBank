@@ -8,7 +8,7 @@ class InternetList extends React.Component {
 			<div className="col-sm-6">
 				<div className="panel">
 					<div className="panel-body">
-						<h3>Internet</h3>
+						<h3>Internet payments</h3>
 						<p>Payment your internet.</p>
 						<a href="/operations/internet" role="button" className="btn btn-default">More</a>
 					</div>

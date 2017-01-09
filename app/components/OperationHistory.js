@@ -106,6 +106,11 @@ class OperationHistory extends React.Component {
 								leftIcon={<ActionInfo />} />
 							<Divider inset={true} />
 							<ListItem
+								primaryText={this.state.selectedTransaction ? new Date(this.state.selectedTransaction.createdAt).toLocaleString() : this.state.selectedTransaction.createdAt}
+								secondaryText="Payment time"
+								leftIcon={<ActionInfo />} />
+							<Divider inset={true} />
+							<ListItem
 								primaryText={this.state.selectedTransaction.price}
 								secondaryText="Payment price"
 								leftIcon={<Money />} />
@@ -126,9 +131,10 @@ class OperationHistory extends React.Component {
 									secondaryText={
 										<p>
 											<span style={{color: darkBlack}}>{"Money count: " + operation.price}</span><br />
+											Time: {new Date(operation.createdAt).toLocaleString()}
 										</p>
 									}
-									secondaryTextLines={1}
+									secondaryTextLines={2}
 								/>
 								<Divider inset={true} />
 							</div>
