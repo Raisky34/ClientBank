@@ -100,20 +100,11 @@ exports.cardPost = function(req, res, next) {
   if (errors) {
     return res.status(400).send(errors);
   }
-  User.find({card:{$in: [req.body.cardId]}})
   Card.findOne({ number: req.body.number }, function(err, card) {
       if (!card) {
         isNewCard = true;
         return res.status(400).send({ msg: 'The card number you have entered not exist.' });
       } else {
-        User.find({
-          card: {
-            $in: [req.body.cardId]
-          }
-        }, function(err, card) {
-          if (card) {
-            return res.status(400).send({ msg: 'The card has been added in other account.' });
-          } else {
             let cardId = card._id;
             User.findById(req.body.userId, function(err, user) {
       				var result = -1;
@@ -142,8 +133,6 @@ exports.cardPost = function(req, res, next) {
       					return res.status(400).send({ msg: 'Card already added to your account' });
       				}
             });
-          }
-        });
       }
     });
 };
